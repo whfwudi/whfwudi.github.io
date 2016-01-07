@@ -53,19 +53,19 @@
 
 
 
-<meta name="description" content="iOS缓存清理功能的实现移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所">
+<meta name="description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
+获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS缓存清理功能的实现">
 <meta property="og:url" content="http://yoursite.com/2016/01/07/iOS缓存清理功能的实现/index.html">
 <meta property="og:site_name" content="Haifeng Wang’s Blog">
-<meta property="og:description" content="iOS缓存清理功能的实现移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所">
-<meta property="og:updated_time" content="2016-01-07T08:11:21.000Z">
+<meta property="og:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
+获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
+<meta property="og:updated_time" content="2016-01-07T09:29:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS缓存清理功能的实现">
-<meta name="twitter:description" content="iOS缓存清理功能的实现移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所">
+<meta name="twitter:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
+获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
 
 
 
@@ -262,7 +262,7 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="iOS缓存清理功能的实现">iOS缓存清理功能的实现</h2><p>移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：</p>
+        <span itemprop="articleBody"><p>移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：</p>
 <h3 id="获取缓存文件的大小">获取缓存文件的大小</h3><p>由于缓存文件都是存在沙盒中，所以我们可以通过NSFileManager API来实现计算缓存文件大小的功能</p>
 <ol>
 <li>计算单个文件的大小</li>
@@ -453,7 +453,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS缓存清理功能的实现"><span class="nav-number">1.</span> <span class="nav-text">iOS缓存清理功能的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取缓存文件的大小"><span class="nav-number">1.1.</span> <span class="nav-text">获取缓存文件的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除缓存文件"><span class="nav-number">1.2.</span> <span class="nav-text">清除缓存文件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取缓存文件的大小"><span class="nav-number">1.</span> <span class="nav-text">获取缓存文件的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除缓存文件"><span class="nav-number">2.</span> <span class="nav-text">清除缓存文件</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
