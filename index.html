@@ -275,48 +275,47 @@
               <p>移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：</p>
 <h3 id="获取缓存文件的大小">获取缓存文件的大小</h3><p>由于缓存文件都是存在沙盒中，所以我们可以通过NSFileManager API来实现计算缓存文件大小的功能</p>
 <ol>
-<li>计算单个文件的大小</li>
-</ol>
-<p><code>(float)fileSizeAtPath:(NSString *)path{
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:path]){
-        long long size=[fileManager attributesOfItemAtPath:path error:nil].fileSize;
-        return size/1024.0/1024.0;
+<li><p>计算单个文件的大小</p>
+<pre><code>`(<span class="typename">float</span>)<span class="string">fileSizeAtPath:</span>(NSString *)path{
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+    <span class="keyword">if</span>([fileManager <span class="string">fileExistsAtPath:</span>path]){
+    <span class="typename">long</span> <span class="typename">long</span> size=[fileManager <span class="string">attributesOfItemAtPath:</span>path <span class="string">error:</span>nil].fileSize;
+    <span class="keyword">return</span> size<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
     }
-    return 0;
-}</code></p>
-<ol>
-<li>计算目录大小</li>
-</ol>
-<p><code>+(float)folderSizeAtPath:(NSString *)path{
+    <span class="keyword">return</span> <span class="number">0</span>;
+}`
+</code></pre></li>
+<li><p>计算目录大小</p>
+<pre><code>`+(<span class="typename">float</span>)<span class="string">folderSizeAtPath:</span>(NSString *)path{
     NSFileManager *fileManager=[NSFileManager defaultManager];
-    float folderSize;
-    if ([fileManager fileExistsAtPath:path]) {
-        NSArray *childerFiles=[fileManager subpathsAtPath:path];
-        for (NSString *fileName in childerFiles) {
-            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
-            folderSize +=[FileService fileSizeAtPath:absolutePath];
+    <span class="typename">float</span> folderSize;
+    <span class="keyword">if</span> ([fileManager <span class="string">fileExistsAtPath:</span>path]) {
+    NSArray *childerFiles=[fileManager <span class="string">subpathsAtPath:</span>path];
+    <span class="keyword">for</span> (NSString *fileName <span class="keyword">in</span> childerFiles) {
+        NSString *absolutePath=[path <span class="string">stringByAppendingPathComponent:</span>fileName];
+        folderSize +=[FileService <span class="string">fileSizeAtPath:</span>absolutePath];
+    }
+    folderSize+=[[SDImageCache sharedImageCache] getSize]<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
+    <span class="keyword">return</span> folderSize;
         }
-　　　　　//SDWebImage框架自身计算缓存的实现
-        folderSize+=[[SDImageCache sharedImageCache] getSize]/1024.0/1024.0;
-        return folderSize;
-    }
-    return 0;
-}</code></p>
+    <span class="keyword">return</span> <span class="number">0</span>;    
+}`
+</code></pre></li>
+</ol>
 <h3 id="清除缓存文件">清除缓存文件</h3><p>同样也是利用NSFileManager API来实现，SDWebImage框架自己实现了清理缓存操作，我们可以直接调用。</p>
-<p><code>+(void)clearCache:(NSString *)path{
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:path]) {
-        NSArray *childerFiles=[fileManager subpathsAtPath:path];
-        for (NSString *fileName in childerFiles) {
-            //如有需要，加入条件，过滤掉不想删除的文件
-            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
-            [fileManager removeItemAtPath:absolutePath error:nil];
+<pre><code>`+(<span class="keyword">void</span>)clearCache:(<span class="built_in">NSString</span> *)path{
+    <span class="built_in">NSFileManager</span> *fileManager=[<span class="built_in">NSFileManager</span> defaultManager];
+    <span class="keyword">if</span> ([fileManager fileExistsAtPath:path]) {
+        <span class="built_in">NSArray</span> *childerFiles=[fileManager subpathsAtPath:path];
+        <span class="keyword">for</span> (<span class="built_in">NSString</span> *fileName <span class="keyword">in</span> childerFiles) {
+            <span class="comment">//如有需要，加入条件，过滤掉不想删除的文件</span>
+            <span class="built_in">NSString</span> *absolutePath=[path stringByAppendingPathComponent:fileName];
+            [fileManager removeItemAtPath:absolutePath error:<span class="literal">nil</span>];
         }
     }
     [[SDImageCache sharedImageCache] cleanDisk];
-}</code></p>
-
+}`
+</code></pre>
             
           </span>
         
@@ -425,8 +424,18 @@
 <li>远程推送</li>
 <li>地理位置推送<br><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyeq298goj21kw0sadmt.jpg" alt="image"></li>
 </ol>
-<h3 id="1、用户推送">1、用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：<br>`if (IS_IOS8) {<br>        //1.创建消息上面要添加的动作(按钮的形式显示出来)<br>        UIMutableUserNotificationAction *action = [[UIMutableUserNotificationAction alloc] init];<br>        action.identifier = @”action”;//按钮的标示<br>        action.title=@”Accept”;//按钮的标题<br>        action.activationMode = UIUserNotificationActivationModeForeground;//当点击的时候启动程序<br>        //    action.authenticationRequired = YES;<br>        //    action.destructive = YES;  </p>
-<pre><code>    <span class="built_in">UIMutableUserNotificationAction</span> *action2 = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+<h3 id="1、用户推送">1、用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：</p>
+<pre><code>`<span class="keyword">if</span> (IS_IOS8) {  
+
+    <span class="comment">//1.创建消息上面要添加的动作(按钮的形式显示出来)  </span>
+    <span class="built_in">UIMutableUserNotificationAction</span> *action = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+    action<span class="variable">.identifier</span> = <span class="string">@"action"</span>;<span class="comment">//按钮的标示  </span>
+    action<span class="variable">.title</span>=<span class="string">@"Accept"</span>;<span class="comment">//按钮的标题  </span>
+    action<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeForeground</span>;<span class="comment">//当点击的时候启动程序  </span>
+    <span class="comment">//    action.authenticationRequired = YES;  </span>
+    <span class="comment">//    action.destructive = YES;  </span>
+
+    <span class="built_in">UIMutableUserNotificationAction</span> *action2 = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
     action2<span class="variable">.identifier</span> = <span class="string">@"action2"</span>;  
     action2<span class="variable">.title</span>=<span class="string">@"Reject"</span>;  
     action2<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeBackground</span>;<span class="comment">//当点击的时候不启动程序，在后台处理  </span>
@@ -444,34 +453,35 @@
 
 }<span class="keyword">else</span>{  
     [application registerForRemoteNotificationTypes: <span class="built_in">UIRemoteNotificationTypeAlert</span> | <span class="built_in">UIRemoteNotificationTypeBadge</span> | <span class="built_in">UIRemoteNotificationTypeSound</span>];  
-}  `
-</code></pre><p><code>- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings  
+}  
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application didRegisterUserNotificationSettings:(<span class="built_in">UIUserNotificationSettings</span> *)notificationSettings  
 {  
-//    UIUserNotificationSettings *settings = [application currentUserNotificationSettings];  
-//    UIUserNotificationType types = [settings types];  
-//    //只有5跟7的时候包含了 UIUserNotificationTypeBadge  
-//    if (types == 5 || types == 7) {  
-//        application.applicationIconBadgeNumber = 0;  
-//    }  
-    //注册远程通知  
-    [application registerForRemoteNotifications];  
-}</code><br>我们仅仅是注册了通知的设备，还要注推送通知的行为，在iOS8中，行为能直接在推送消息进行，如回复消息，拒绝等消息就是三个方法进行注册<br><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyeyi825mj21aa12ggoc.jpg" alt="image"></p>
+<span class="comment">//    UIUserNotificationSettings *settings = [application currentUserNotificationSettings];  </span>
+<span class="comment">//    UIUserNotificationType types = [settings types];  </span>
+<span class="comment">//    //只有5跟7的时候包含了 UIUserNotificationTypeBadge  </span>
+<span class="comment">//    if (types == 5 || types == 7) {  </span>
+<span class="comment">//        application.applicationIconBadgeNumber = 0;  </span>
+<span class="comment">//    }  </span>
+<span class="comment">//注册远程通知  </span>
+[application registerForRemoteNotifications];  
+</code></pre><p>}  `</p>
+<p>我们仅仅是注册了通知的设备，还要注推送通知的行为，在iOS8中，行为能直接在推送消息进行，如回复消息，拒绝等消息就是三个方法进行注册<br><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyeyi825mj21aa12ggoc.jpg" alt="image"></p>
 <p>我们如何能进行这些行为，首先我们需要注册这些行为</p>
 <ol>
-<li>Actions</li>
+<li><p>Actions</p>
+<pre><code>`<span class="built_in">UIMutableUserNotificationAction</span> *acceptAction = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+acceptAction<span class="variable">.identifier</span> = <span class="string">@"RickAction"</span>;  
+acceptAction<span class="variable">.title</span> = <span class="string">@"Accept"</span>;  
+acceptAction<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeBackground</span>;  
+acceptAction<span class="variable">.destructive</span> = <span class="literal">NO</span>;  
+acceptAction<span class="variable">.authenticationRequired</span> = <span class="literal">NO</span>;  `
+</code></pre></li>
+<li><p>Categories</p>
+<pre><code>`<span class="built_in">UIMutableUserNotificationCategory</span> *inviteCategory = [[<span class="built_in">UIMutableUserNotificationCategory</span> alloc] init];  
+inviteCategory<span class="variable">.identifier</span> = <span class="string">@"INVITE_CATEGORY"</span>;  
+inviteCategory setActions:@[acceptAction] forContext:<span class="built_in">UIUserNotificationActionContextDefault</span>];  `
+</code></pre></li>
 </ol>
-<p><code>UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];  
-acceptAction.identifier = @&quot;RickAction&quot;;  
-acceptAction.title = @&quot;Accept&quot;;  
-acceptAction.activationMode = UIUserNotificationActivationModeBackground;  
-acceptAction.destructive = NO;  
-acceptAction.authenticationRequired = NO;</code></p>
-<ol>
-<li>Categories</li>
-</ol>
-<p><code>UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];  
-inviteCategory.identifier = @&quot;INVITE_CATEGORY&quot;;  
-[inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextDefault];</code></p>
 <p><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyf4bfhvrj20q80zytaw.jpg" alt="image"></p>
 <p>我们需要注意这个UIUserNotificationActionContextDefault,如果我们使用这个，我们会得到这个推送行为，Maybe和Accept<br>我们还可以使用UIUserNotificationActionContextMinimal得到的是Decline和Accept行为</p>
 <p><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyf61ypo0j20q010476h.jpg" alt="image"></p>
@@ -484,58 +494,88 @@ UIUserNotificationType  types = UIUserNotificationTypeBadge | UIUserNotification
 UIUserNotificationSettings  *mySettings  = [UIUserNotificationSettings settingsForTypes:types categories:categories];  
 [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];</code></p>
 <h3 id="2、远程推送">2、远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
-<p><code>{  
-    “aps”: {  
-        &quot;content-available&quot;: 1,  
-        &quot;alert&quot;: &quot;This is the alert text&quot;,  
-        &quot;badge&quot;: 1,  
-        &quot;sound&quot;: &quot;default&quot;  
+<pre><code>`{  
+        “aps”: {  
+           <span class="string">"content-available"</span>: <span class="number">1</span>,  
+        <span class="string">"alert"</span>: <span class="string">"This is the alert text"</span>,  
+        <span class="string">"badge"</span>: <span class="number">1</span>,  
+        <span class="string">"sound"</span>: <span class="string">"default"</span>  
     }  
-}</code></p>
-<p>若要使用远程推送，满足两个条件：</p>
+}  `
+</code></pre><p>若要使用远程推送，满足两个条件：</p>
 <ol>
-<li>用户需要调用注册用户推送registerUserNotificationSettings;</li>
-</ol>
-<p>`[[UIApplication sharedApplication] registerForRemoteNotifications];</p>
-<ul>
-<li>(void)application:(UIApplication <em>)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData </em>)deviceToken {<br>  NSString *token=[NSString stringWithFormat:@”%@”,deviceToken];<br>  token=[token stringByReplacingOccurrencesOfString:@”&lt;” withString:@””];<br>  token=[token stringByReplacingOccurrencesOfString:@”&gt;” withString:@””];<br>  token=[token stringByReplacingOccurrencesOfString:@” “ withString:@””];  </li>
-</ul>
-<p>} </p>
-<ul>
-<li>(void)application:(UIApplication <em>)application didFailToRegisterForRemoteNotificationsWithError:(NSError </em>)error {  </li>
-</ul>
-<p>}`</p>
-<ol>
-<li>在info.plist文件中UIBackgroundModes必须包含远程通知。</li>
+<li><p>用户需要调用注册用户推送registerUserNotificationSettings;</p>
+<pre><code>`[[UIApplication sharedApplication] registerForRemoteNotifications];
+
+    - (<span class="typename">void</span>)<span class="string">application:</span>(UIApplication *)application <span class="string">didRegisterForRemoteNotificationsWithDeviceToken:</span>(NSData *)deviceToken {  
+    NSString *token=[NSString <span class="string">stringWithFormat:</span>@<span class="string">"%@"</span>,deviceToken];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">"&lt;"</span> <span class="string">withString:</span>@<span class="string">""</span>];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">"&gt;"</span> <span class="string">withString:</span>@<span class="string">""</span>];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">" "</span> <span class="string">withString:</span>@<span class="string">""</span>];
+} 
+
+- (<span class="typename">void</span>)<span class="string">application:</span>(UIApplication *)application <span class="string">didFailToRegisterForRemoteNotificationsWithError:</span>(NSError *)error {  
+
+}`
+</code></pre></li>
+<li><p>在info.plist文件中UIBackgroundModes必须包含远程通知。</p>
+</li>
 </ol>
 <h3 id="3、iOS7通知代理方法">3、iOS7通知代理方法</h3><p><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfq2omeij21kw0zc456.jpg" alt="image"><br>后来又增加了本地通知的代理方法<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg" alt="image"><br>iOS8的推送代理方法只有两个了<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg" alt="image"></p>
-<p>`- (void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler<br>{<br>}  </p>
-<ul>
-<li><p>(void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler<br>{<br>}  </p>
-</li>
-<li><p>(void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler<br>{<br>  if ([identifier isEqualToString:@”RickAction”]) {  </p>
-<pre><code><span class="title">[self handleAcceptActionWithNotification:notification]</span><span class="comment">;  </span>
-</code></pre><p>  }<br>  completionHandler();<br>}  </p>
-</li>
-<li><p>(void)handleAcceptActionWithNotification:(UILocalNotification*)notification<br>{<br>}  `</p>
-</li>
-</ul>
-<h3 id="4、地理位置推送">4、地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
-<p>`//Location Notification<br>    CLLocationManager *locMan = [[CLLocationManager alloc] init];<br>    locMan.delegate = self;<br>    [locMan requestWhenInUseAuthorization];  </p>
-<p>#pragma mark - CLLocationManager  </p>
-<ul>
-<li>(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status  </li>
-</ul>
-<p>{<br>    BOOL canUseLocationNotifications = (status == kCLAuthorizationStatusAuthorizedWhenInUse);<br>    if (canUseLocationNotifications) {<br>        [self startShowLocationNotification];<br>    }<br>}  </p>
-<ul>
-<li>(void)application:(UIApplication <em>)application didReceiveLocalNotification:(UILocalNotification </em>)notification  </li>
-</ul>
-<p>{<br>    CLRegion *region = notification.region;<br>    if (region) {<br>    }<br>}  </p>
-<ul>
-<li>(void)startShowLocationNotification  </li>
-</ul>
-<p>{<br>    CLLocationCoordinate2D local2D ;<br>    local2D.latitude = 123.0;<br>    local2D.longitude = 223.0;<br>    UILocalNotification *locNotification = [[UILocalNotification alloc] init];<br>    locNotification.alertBody = @”你接收到了”;<br>    locNotification.regionTriggersOnce = YES;<br>    locNotification.region = [[CLCircularRegion alloc] initWithCenter:local2D radius:45 identifier:@”local-identity”];<br>    [[UIApplication sharedApplication] scheduleLocalNotification:locNotification];<br>}  `</p>
-<p>如果没有开启Core Location 那么上面的didReceiveLocalNotification不会被调用<br>最后再总结一下，整个推送流程我觉得是这样子的，先注册推送，然后推送消息，客户端接收推送消息，执行推送行为。如果有错误，还请在文章下面评论，欢迎指正。<br><img src="http://ww2.sinaimg.cn/large/626e5d69gw1ehyg8u1o51j21ea0qkmz1.jpg" alt="image"></p>
+<pre><code>`- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forLocalNotification:    <span class="params">(UILocalNotification *)</span>notification completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+}  
+
+- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forRemoteNotification:<span class="params">(NSDictionary *)</span>userInfo completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+}  
+
+- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forLocalNotification:    <span class="params">(UILocalNotification *)</span>notification completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+<span class="keyword">if</span> <span class="params">([identifier isEqualToString:@<span class="string">"RickAction"</span>])</span> {  
+    [self handleAcceptActionWithNotification:notification];  
+}  
+completionHandler<span class="params">()</span>;  
+}  
+
+- <span class="params">(void)</span>handleAcceptActionWithNotification:<span class="params">(UILocalNotification*)</span>notification  
+{  
+}  `
+</code></pre><h3 id="4、地理位置推送">4、地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
+<pre><code>`<span class="comment">//Location Notification  </span>
+CLLocationManager *locMan = [[CLLocationManager alloc] init];  
+locMan<span class="variable">.delegate</span> = <span class="keyword">self</span>;  
+[locMan requestWhenInUseAuthorization];  
+
+- (<span class="keyword">void</span>)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status  
+
+{  
+<span class="built_in">BOOL</span> canUseLocationNotifications = (status == kCLAuthorizationStatusAuthorizedWhenInUse);  
+<span class="keyword">if</span> (canUseLocationNotifications) {  
+    [<span class="keyword">self</span> startShowLocationNotification];  
+}  
+}  
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application didReceiveLocalNotification:(<span class="built_in">UILocalNotification</span> *)notification  
+
+{  
+CLRegion *region = notification<span class="variable">.region</span>;  
+<span class="keyword">if</span> (region) {  
+}  
+}  
+
+- (<span class="keyword">void</span>)startShowLocationNotification  
+
+{  
+CLLocationCoordinate2D local2D ;  
+local2D<span class="variable">.latitude</span> = <span class="number">123.0</span>;  
+local2D<span class="variable">.longitude</span> = <span class="number">223.0</span>;  
+<span class="built_in">UILocalNotification</span> *locNotification = [[<span class="built_in">UILocalNotification</span> alloc] init];  
+locNotification<span class="variable">.alertBody</span> = <span class="string">@"你接收到了"</span>;  
+locNotification<span class="variable">.regionTriggersOnce</span> = <span class="literal">YES</span>;  
+locNotification<span class="variable">.region</span> = [[CLCircularRegion alloc] initWithCenter:local2D radius:<span class="number">45</span> identifier:<span class="string">@"local-identity"</span>];  
+[[<span class="built_in">UIApplication</span> sharedApplication] scheduleLocalNotification:locNotification];  
+}  `
+</code></pre><p>如果没有开启Core Location 那么上面的didReceiveLocalNotification不会被调用<br>最后再总结一下，整个推送流程我觉得是这样子的，先注册推送，然后推送消息，客户端接收推送消息，执行推送行为。如果有错误，还请在文章下面评论，欢迎指正。<br><img src="http://ww2.sinaimg.cn/large/626e5d69gw1ehyg8u1o51j21ea0qkmz1.jpg" alt="image"></p>
 
             
           </span>
@@ -685,37 +725,37 @@ UIUserNotificationSettings  *mySettings  = [UIUserNotificationSettings settingsF
 <li>aps_developer_identity.cer</li>
 </ol>
 <h3 id="4、在项目中配置推送">4、在项目中配置推送</h3><ol>
-<li>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</li>
+<li><p>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</p>
+<pre><code>`<span class="attr_selector">[[UIApplication sharedApplication]</span> <span class="rule"><span class="attribute">registerForRemoteNotificationTypes</span>:<span class="value">(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)]</span></span>; `
+</code></pre></li>
+<li><p>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</p>
+<pre><code>`- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didRegisterForRemoteNotificationsWithDeviceToken:(<span class="built_in">NSData</span> *)deviceToken {     
+        <span class="built_in">NSString</span> *token = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>, deviceToken];  
+    <span class="built_in">NSLog</span>(<span class="string">@"My token is:%@"</span>, token);  
+}
+
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didFailToRegisterForRemoteNotificationsWithError:(<span class="built_in">NSError</span> *)error {      
+        <span class="built_in">NSString</span> *error_str = [<span class="built_in">NSString</span> stringWithFormat: <span class="string">@"%@"</span>, error];  
+    <span class="built_in">NSLog</span>(<span class="string">@"Failed to get token, error:%@"</span>, error_str);  
+}`  
+</code></pre></li>
 </ol>
-<p><code>[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)];</code></p>
-<ol>
-<li>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</li>
-</ol>
-<p><code>- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {     
-    NSString *token = [NSString stringWithFormat:@&quot;%@&quot;, deviceToken];  
-    NSLog(@&quot;My token is:%@&quot;, token);  
-}</code>  </p>
-<p><code>- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {      
-    NSString *error_str = [NSString stringWithFormat: @&quot;%@&quot;, error];  
-    NSLog(@&quot;Failed to get token, error:%@&quot;, error_str);  
-}</code>  </p>
 <p>获取到的deviceToken，我们可以提交给后台应用程序，发送通知的后台应用程序除了需要知道deviceToken之外，还需要一个与APNS连接的证书。<br>这个证书可以通过我们前面生成的两个文件中得到。</p>
 <ol>
-<li>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</li>
+<li><p>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</p>
+<pre><code>`openssl x509 -<span class="keyword">in</span> aps_developer_identity<span class="class">.cer</span> -inform DER -out aps_developer_identity<span class="class">.pem</span> -outform PEM`
+</code></pre></li>
+<li><p>将p12格式的私钥转换成pem</p>
+<pre><code>`openssl pkcs12 -nocerts -<span class="keyword">out</span> Push_Noenc.pem -<span class="keyword">in</span> <span class="keyword">Push</span>.p12`
+</code></pre></li>
+<li><p>创建p12文件</p>
+<pre><code>`openssl pkcs12 -export -<span class="keyword">in</span> aps_developer_identity<span class="class">.pem</span> -inkey Push_Noenc<span class="class">.pem</span> -certfile Push<span class="class">.certSigningRequest</span> -name <span class="string">"aps_developer_identity"</span> -out aps_developer_identity.p12`
+</code></pre></li>
 </ol>
-<p><code>openssl x509 -in aps_developer_identity.cer -inform DER -out aps_developer_identity.pem -outform PEM</code></p>
-<ol>
-<li>将p12格式的私钥转换成pem</li>
-</ol>
-<p><code>openssl pkcs12 -nocerts -out Push_Noenc.pem -in Push.p12</code></p>
-<ol>
-<li>创建p12文件</li>
-</ol>
-<p><code>openssl pkcs12 -export -in aps_developer_identity.pem -inkey Push_Noenc.pem -certfile Push.certSigningRequest -name &quot;aps_developer_identity&quot; -out aps_developer_identity.p12</code></p>
 <p>这样我们就得到了在.net或java等后台应用程序中使用的证书文件：aps_developer_identity.p12</p>
 <p>如果后台应用是php的话,双击aps_developer_identity.cer，将其安装到电脑上，钥匙串选择登录，种类选择所有项目，在右侧列表中选中push的证书以及对应的专用密钥，并导出2项，命名为ck.p12。</p>
-<p><code>openssl pkcs12 -in ck.p12 -out ck.pem -nodes</code></p>
-
+<pre><code>`openssl pkcs12 -<span class="keyword">in</span> ck<span class="class">.p12</span> -out ck<span class="class">.pem</span> -nodes`
+</code></pre>
             
           </span>
         
@@ -846,7 +886,7 @@ UIUserNotificationSettings  *mySettings  = [UIUserNotificationSettings settingsF
 <h4 id="插入图片">插入图片</h4><p><img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=266880594,205135855&amp;fm=116&amp;gp=0.jpg" alt="Mou icon"></p>
 <p>##5、斜体与粗体<br><strong>这里是粗体</strong> <em>这里是斜体</em></p>
 <p>##6、表格<br>|           <strong>Tables</strong> | <strong>Are</strong>             | <strong>Cool</strong>|<br>|        ——-     |—–            | —–        |<br>|         col 3 is    | right-aligened| $ 1600     |<br>|        col 2 is     | centered        |$12        |<br>|    zebre stripes    | sre neat         | $1        |</p>
-<p>##7、作为一个程序员这个是关键 代码框<br><code>code for app is very good</code></p>
+<p>##7、作为一个程序员这个是关键 代码框<br>    <code>code for app is very good</code></p>
 <p>##8、分割线</p>
 <hr>
 <p>##9、CMD+R 快速打开文档<br>cmd+r</p>

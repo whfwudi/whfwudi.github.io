@@ -61,7 +61,7 @@
 <meta property="og:site_name" content="Haifeng Wang’s Blog">
 <meta property="og:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
 获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
-<meta property="og:updated_time" content="2016-01-07T09:29:59.000Z">
+<meta property="og:updated_time" content="2016-01-07T09:41:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS缓存清理功能的实现">
 <meta name="twitter:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
@@ -265,48 +265,47 @@
         <span itemprop="articleBody"><p>移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：</p>
 <h3 id="获取缓存文件的大小">获取缓存文件的大小</h3><p>由于缓存文件都是存在沙盒中，所以我们可以通过NSFileManager API来实现计算缓存文件大小的功能</p>
 <ol>
-<li>计算单个文件的大小</li>
-</ol>
-<p><code>(float)fileSizeAtPath:(NSString *)path{
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:path]){
-        long long size=[fileManager attributesOfItemAtPath:path error:nil].fileSize;
-        return size/1024.0/1024.0;
+<li><p>计算单个文件的大小</p>
+<pre><code>`(<span class="typename">float</span>)<span class="string">fileSizeAtPath:</span>(NSString *)path{
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+    <span class="keyword">if</span>([fileManager <span class="string">fileExistsAtPath:</span>path]){
+    <span class="typename">long</span> <span class="typename">long</span> size=[fileManager <span class="string">attributesOfItemAtPath:</span>path <span class="string">error:</span>nil].fileSize;
+    <span class="keyword">return</span> size<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
     }
-    return 0;
-}</code></p>
-<ol>
-<li>计算目录大小</li>
-</ol>
-<p><code>+(float)folderSizeAtPath:(NSString *)path{
+    <span class="keyword">return</span> <span class="number">0</span>;
+}`
+</code></pre></li>
+<li><p>计算目录大小</p>
+<pre><code>`+(<span class="typename">float</span>)<span class="string">folderSizeAtPath:</span>(NSString *)path{
     NSFileManager *fileManager=[NSFileManager defaultManager];
-    float folderSize;
-    if ([fileManager fileExistsAtPath:path]) {
-        NSArray *childerFiles=[fileManager subpathsAtPath:path];
-        for (NSString *fileName in childerFiles) {
-            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
-            folderSize +=[FileService fileSizeAtPath:absolutePath];
+    <span class="typename">float</span> folderSize;
+    <span class="keyword">if</span> ([fileManager <span class="string">fileExistsAtPath:</span>path]) {
+    NSArray *childerFiles=[fileManager <span class="string">subpathsAtPath:</span>path];
+    <span class="keyword">for</span> (NSString *fileName <span class="keyword">in</span> childerFiles) {
+        NSString *absolutePath=[path <span class="string">stringByAppendingPathComponent:</span>fileName];
+        folderSize +=[FileService <span class="string">fileSizeAtPath:</span>absolutePath];
+    }
+    folderSize+=[[SDImageCache sharedImageCache] getSize]<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
+    <span class="keyword">return</span> folderSize;
         }
-　　　　　//SDWebImage框架自身计算缓存的实现
-        folderSize+=[[SDImageCache sharedImageCache] getSize]/1024.0/1024.0;
-        return folderSize;
-    }
-    return 0;
-}</code></p>
+    <span class="keyword">return</span> <span class="number">0</span>;    
+}`
+</code></pre></li>
+</ol>
 <h3 id="清除缓存文件">清除缓存文件</h3><p>同样也是利用NSFileManager API来实现，SDWebImage框架自己实现了清理缓存操作，我们可以直接调用。</p>
-<p><code>+(void)clearCache:(NSString *)path{
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:path]) {
-        NSArray *childerFiles=[fileManager subpathsAtPath:path];
-        for (NSString *fileName in childerFiles) {
-            //如有需要，加入条件，过滤掉不想删除的文件
-            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
-            [fileManager removeItemAtPath:absolutePath error:nil];
+<pre><code>`+(<span class="keyword">void</span>)clearCache:(<span class="built_in">NSString</span> *)path{
+    <span class="built_in">NSFileManager</span> *fileManager=[<span class="built_in">NSFileManager</span> defaultManager];
+    <span class="keyword">if</span> ([fileManager fileExistsAtPath:path]) {
+        <span class="built_in">NSArray</span> *childerFiles=[fileManager subpathsAtPath:path];
+        <span class="keyword">for</span> (<span class="built_in">NSString</span> *fileName <span class="keyword">in</span> childerFiles) {
+            <span class="comment">//如有需要，加入条件，过滤掉不想删除的文件</span>
+            <span class="built_in">NSString</span> *absolutePath=[path stringByAppendingPathComponent:fileName];
+            [fileManager removeItemAtPath:absolutePath error:<span class="literal">nil</span>];
         }
     }
     [[SDImageCache sharedImageCache] cleanDisk];
-}</code></p>
-</span>
+}`
+</code></pre></span>
       
     </div>
 

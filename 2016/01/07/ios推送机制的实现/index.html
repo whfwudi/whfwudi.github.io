@@ -82,7 +82,7 @@ APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示的
 <meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8016/e681263d-14a4-3b66-9e50-5e71c645bdc0.jpg">
 <meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8018/fab8eb43-56c7-300f-bb67-f722ce09a2b9.jpg">
 <meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8025/72f36fed-4f10-32fb-8dbc-940fad8610bb.jpg">
-<meta property="og:updated_time" content="2016-01-07T09:30:03.000Z">
+<meta property="og:updated_time" content="2016-01-07T09:42:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS推送机制的实现">
 <meta name="twitter:description" content="1、实现原理ios消息推送的工作机制可以简单的用下图来概括：Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。
@@ -333,37 +333,37 @@ APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示的
 <li>aps_developer_identity.cer</li>
 </ol>
 <h3 id="4、在项目中配置推送">4、在项目中配置推送</h3><ol>
-<li>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</li>
+<li><p>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</p>
+<pre><code>`<span class="attr_selector">[[UIApplication sharedApplication]</span> <span class="rule"><span class="attribute">registerForRemoteNotificationTypes</span>:<span class="value">(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)]</span></span>; `
+</code></pre></li>
+<li><p>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</p>
+<pre><code>`- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didRegisterForRemoteNotificationsWithDeviceToken:(<span class="built_in">NSData</span> *)deviceToken {     
+        <span class="built_in">NSString</span> *token = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>, deviceToken];  
+    <span class="built_in">NSLog</span>(<span class="string">@"My token is:%@"</span>, token);  
+}
+
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didFailToRegisterForRemoteNotificationsWithError:(<span class="built_in">NSError</span> *)error {      
+        <span class="built_in">NSString</span> *error_str = [<span class="built_in">NSString</span> stringWithFormat: <span class="string">@"%@"</span>, error];  
+    <span class="built_in">NSLog</span>(<span class="string">@"Failed to get token, error:%@"</span>, error_str);  
+}`  
+</code></pre></li>
 </ol>
-<p><code>[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)];</code></p>
-<ol>
-<li>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</li>
-</ol>
-<p><code>- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {     
-    NSString *token = [NSString stringWithFormat:@&quot;%@&quot;, deviceToken];  
-    NSLog(@&quot;My token is:%@&quot;, token);  
-}</code>  </p>
-<p><code>- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {      
-    NSString *error_str = [NSString stringWithFormat: @&quot;%@&quot;, error];  
-    NSLog(@&quot;Failed to get token, error:%@&quot;, error_str);  
-}</code>  </p>
 <p>获取到的deviceToken，我们可以提交给后台应用程序，发送通知的后台应用程序除了需要知道deviceToken之外，还需要一个与APNS连接的证书。<br>这个证书可以通过我们前面生成的两个文件中得到。</p>
 <ol>
-<li>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</li>
+<li><p>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</p>
+<pre><code>`openssl x509 -<span class="keyword">in</span> aps_developer_identity<span class="class">.cer</span> -inform DER -out aps_developer_identity<span class="class">.pem</span> -outform PEM`
+</code></pre></li>
+<li><p>将p12格式的私钥转换成pem</p>
+<pre><code>`openssl pkcs12 -nocerts -<span class="keyword">out</span> Push_Noenc.pem -<span class="keyword">in</span> <span class="keyword">Push</span>.p12`
+</code></pre></li>
+<li><p>创建p12文件</p>
+<pre><code>`openssl pkcs12 -export -<span class="keyword">in</span> aps_developer_identity<span class="class">.pem</span> -inkey Push_Noenc<span class="class">.pem</span> -certfile Push<span class="class">.certSigningRequest</span> -name <span class="string">"aps_developer_identity"</span> -out aps_developer_identity.p12`
+</code></pre></li>
 </ol>
-<p><code>openssl x509 -in aps_developer_identity.cer -inform DER -out aps_developer_identity.pem -outform PEM</code></p>
-<ol>
-<li>将p12格式的私钥转换成pem</li>
-</ol>
-<p><code>openssl pkcs12 -nocerts -out Push_Noenc.pem -in Push.p12</code></p>
-<ol>
-<li>创建p12文件</li>
-</ol>
-<p><code>openssl pkcs12 -export -in aps_developer_identity.pem -inkey Push_Noenc.pem -certfile Push.certSigningRequest -name &quot;aps_developer_identity&quot; -out aps_developer_identity.p12</code></p>
 <p>这样我们就得到了在.net或java等后台应用程序中使用的证书文件：aps_developer_identity.p12</p>
 <p>如果后台应用是php的话,双击aps_developer_identity.cer，将其安装到电脑上，钥匙串选择登录，种类选择所有项目，在右侧列表中选中push的证书以及对应的专用密钥，并导出2项，命名为ck.p12。</p>
-<p><code>openssl pkcs12 -in ck.p12 -out ck.pem -nodes</code></p>
-</span>
+<pre><code>`openssl pkcs12 -<span class="keyword">in</span> ck<span class="class">.p12</span> -out ck<span class="class">.pem</span> -nodes`
+</code></pre></span>
       
     </div>
 
