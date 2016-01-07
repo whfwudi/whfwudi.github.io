@@ -199,15 +199,226 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/07/ios8注册通知/" itemprop="url">
+                  ios8注册通知
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-07T15:46:03+08:00" content="2016-01-07">
+              2016-01-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/07/ios8注册通知/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/07/ios8注册通知/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="iOS8注册通知">iOS8注册通知</h2><p>iO推送目前分为四种：</p>
+<ol>
+<li>用户推送</li>
+<li>本地推送</li>
+<li>远程推送</li>
+<li>地理位置推送<br><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyeq298goj21kw0sadmt.jpg" alt="image"></li>
+</ol>
+<h3 id="1、用户推送">1、用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：<br>`if (IS_IOS8) {<br>        //1.创建消息上面要添加的动作(按钮的形式显示出来)<br>        UIMutableUserNotificationAction *action = [[UIMutableUserNotificationAction alloc] init];<br>        action.identifier = @”action”;//按钮的标示<br>        action.title=@”Accept”;//按钮的标题<br>        action.activationMode = UIUserNotificationActivationModeForeground;//当点击的时候启动程序<br>        //    action.authenticationRequired = YES;<br>        //    action.destructive = YES;  </p>
+<pre><code>    <span class="built_in">UIMutableUserNotificationAction</span> *action2 = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+    action2<span class="variable">.identifier</span> = <span class="string">@"action2"</span>;  
+    action2<span class="variable">.title</span>=<span class="string">@"Reject"</span>;  
+    action2<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeBackground</span>;<span class="comment">//当点击的时候不启动程序，在后台处理  </span>
+    action<span class="variable">.authenticationRequired</span> = <span class="literal">YES</span>;<span class="comment">//需要解锁才能处理，如果action.activationMode = UIUserNotificationActivationModeForeground;则这个属性被忽略；  </span>
+    action<span class="variable">.destructive</span> = <span class="literal">YES</span>;  
+
+    <span class="comment">//2.创建动作(按钮)的类别集合  </span>
+    <span class="built_in">UIMutableUserNotificationCategory</span> *categorys = [[<span class="built_in">UIMutableUserNotificationCategory</span> alloc] init];  
+    categorys<span class="variable">.identifier</span> = <span class="string">@"alert"</span>;<span class="comment">//这组动作的唯一标示,推送通知的时候也是根据这个来区分  </span>
+    [categorys setActions:@[action,action2] forContext:(<span class="built_in">UIUserNotificationActionContextMinimal</span>)];  
+
+    <span class="comment">//3.创建UIUserNotificationSettings，并设置消息的显示类类型  </span>
+    <span class="built_in">UIUserNotificationSettings</span> *notiSettings = [<span class="built_in">UIUserNotificationSettings</span> settingsForTypes:(<span class="built_in">UIUserNotificationTypeBadge</span> | <span class="built_in">UIUserNotificationTypeAlert</span> | <span class="built_in">UIRemoteNotificationTypeSound</span>) categories:[<span class="built_in">NSSet</span> setWithObjects:categorys, <span class="literal">nil</span> <span class="literal">nil</span>]];  
+    [application registerUserNotificationSettings:notiSettings];  
+
+}<span class="keyword">else</span>{  
+    [application registerForRemoteNotificationTypes: <span class="built_in">UIRemoteNotificationTypeAlert</span> | <span class="built_in">UIRemoteNotificationTypeBadge</span> | <span class="built_in">UIRemoteNotificationTypeSound</span>];  
+}  `
+</code></pre><p><code>- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings  
+{  
+//    UIUserNotificationSettings *settings = [application currentUserNotificationSettings];  
+//    UIUserNotificationType types = [settings types];  
+//    //只有5跟7的时候包含了 UIUserNotificationTypeBadge  
+//    if (types == 5 || types == 7) {  
+//        application.applicationIconBadgeNumber = 0;  
+//    }  
+    //注册远程通知  
+    [application registerForRemoteNotifications];  
+}</code><br>我们仅仅是注册了通知的设备，还要注推送通知的行为，在iOS8中，行为能直接在推送消息进行，如回复消息，拒绝等消息就是三个方法进行注册<br><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyeyi825mj21aa12ggoc.jpg" alt="image"></p>
+<p>我们如何能进行这些行为，首先我们需要注册这些行为</p>
+<ol>
+<li>Actions</li>
+</ol>
+<p><code>UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];  
+acceptAction.identifier = @&quot;RickAction&quot;;  
+acceptAction.title = @&quot;Accept&quot;;  
+acceptAction.activationMode = UIUserNotificationActivationModeBackground;  
+acceptAction.destructive = NO;  
+acceptAction.authenticationRequired = NO;</code></p>
+<ol>
+<li>Categories</li>
+</ol>
+<p><code>UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];  
+inviteCategory.identifier = @&quot;INVITE_CATEGORY&quot;;  
+[inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextDefault];</code></p>
+<p><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyf4bfhvrj20q80zytaw.jpg" alt="image"></p>
+<p>我们需要注意这个UIUserNotificationActionContextDefault,如果我们使用这个，我们会得到这个推送行为，Maybe和Accept<br>我们还可以使用UIUserNotificationActionContextMinimal得到的是Decline和Accept行为</p>
+<p><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyf61ypo0j20q010476h.jpg" alt="image"></p>
+<ol>
+<li>Settings</li>
+</ol>
+<p>在这些行为注册之后，我们加上之前提到的推送设置就完成了注册推送的这个流程了</p>
+<p><code>NSSet *categories = [NSSet setWithObjects:inviteCategory, nil nil];  
+UIUserNotificationType  types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert ;  
+UIUserNotificationSettings  *mySettings  = [UIUserNotificationSettings settingsForTypes:types categories:categories];  
+[[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];</code></p>
+<h3 id="2、远程推送">2、远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
+<p><code>{  
+    “aps”: {  
+        &quot;content-available&quot;: 1,  
+        &quot;alert&quot;: &quot;This is the alert text&quot;,  
+        &quot;badge&quot;: 1,  
+        &quot;sound&quot;: &quot;default&quot;  
+    }  
+}</code></p>
+<p>若要使用远程推送，满足两个条件：</p>
+<ol>
+<li>用户需要调用注册用户推送registerUserNotificationSettings;</li>
+</ol>
+<p>`[[UIApplication sharedApplication] registerForRemoteNotifications];</p>
+<ul>
+<li>(void)application:(UIApplication <em>)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData </em>)deviceToken {<br>  NSString *token=[NSString stringWithFormat:@”%@”,deviceToken];<br>  token=[token stringByReplacingOccurrencesOfString:@”&lt;” withString:@””];<br>  token=[token stringByReplacingOccurrencesOfString:@”&gt;” withString:@””];<br>  token=[token stringByReplacingOccurrencesOfString:@” “ withString:@””];  </li>
+</ul>
+<p>} </p>
+<ul>
+<li>(void)application:(UIApplication <em>)application didFailToRegisterForRemoteNotificationsWithError:(NSError </em>)error {  </li>
+</ul>
+<p>}`</p>
+<ol>
+<li>在info.plist文件中UIBackgroundModes必须包含远程通知。</li>
+</ol>
+<h3 id="3、iOS7通知代理方法">3、iOS7通知代理方法</h3><p><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfq2omeij21kw0zc456.jpg" alt="image"><br>后来又增加了本地通知的代理方法<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg" alt="image"><br>iOS8的推送代理方法只有两个了<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg" alt="image"></p>
+<p>`- (void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler<br>{<br>}  </p>
+<ul>
+<li><p>(void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler<br>{<br>}  </p>
+</li>
+<li><p>(void)application:(UIApplication <em>)application handleActionWithIdentifier:(NSString </em>)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler<br>{<br>  if ([identifier isEqualToString:@”RickAction”]) {  </p>
+<pre><code><span class="title">[self handleAcceptActionWithNotification:notification]</span><span class="comment">;  </span>
+</code></pre><p>  }<br>  completionHandler();<br>}  </p>
+</li>
+<li><p>(void)handleAcceptActionWithNotification:(UILocalNotification*)notification<br>{<br>}  `</p>
+</li>
+</ul>
+<h3 id="4、地理位置推送">4、地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
+<p>`//Location Notification<br>    CLLocationManager *locMan = [[CLLocationManager alloc] init];<br>    locMan.delegate = self;<br>    [locMan requestWhenInUseAuthorization];  </p>
+<p>#pragma mark - CLLocationManager  </p>
+<ul>
+<li>(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status  </li>
+</ul>
+<p>{<br>    BOOL canUseLocationNotifications = (status == kCLAuthorizationStatusAuthorizedWhenInUse);<br>    if (canUseLocationNotifications) {<br>        [self startShowLocationNotification];<br>    }<br>}  </p>
+<ul>
+<li>(void)application:(UIApplication <em>)application didReceiveLocalNotification:(UILocalNotification </em>)notification  </li>
+</ul>
+<p>{<br>    CLRegion *region = notification.region;<br>    if (region) {<br>    }<br>}  </p>
+<ul>
+<li>(void)startShowLocationNotification  </li>
+</ul>
+<p>{<br>    CLLocationCoordinate2D local2D ;<br>    local2D.latitude = 123.0;<br>    local2D.longitude = 223.0;<br>    UILocalNotification *locNotification = [[UILocalNotification alloc] init];<br>    locNotification.alertBody = @”你接收到了”;<br>    locNotification.regionTriggersOnce = YES;<br>    locNotification.region = [[CLCircularRegion alloc] initWithCenter:local2D radius:45 identifier:@”local-identity”];<br>    [[UIApplication sharedApplication] scheduleLocalNotification:locNotification];<br>}  `</p>
+<p>如果没有开启Core Location 那么上面的didReceiveLocalNotification不会被调用<br>最后再总结一下，整个推送流程我觉得是这样子的，先注册推送，然后推送消息，客户端接收推送消息，执行推送行为。如果有错误，还请在文章下面评论，欢迎指正。<br><img src="http://ww2.sinaimg.cn/large/626e5d69gw1ehyg8u1o51j21ea0qkmz1.jpg" alt="image"></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -914,7 +1125,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -928,7 +1139,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
