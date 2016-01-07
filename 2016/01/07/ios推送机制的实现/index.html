@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS开发者申请流程," />
+  <meta name="keywords" content="iOS推送机制的实现," />
 
 
 
@@ -53,75 +53,43 @@
 
 
 
-<meta name="description" content="iOS开发者申请流程1、进入官网选择Programs
-2、点击进入
-3、同意协议
-4、登录apple id
-5、同意协议
-6、选择申请的类型从上往下依次是
+<meta name="description" content="iOS推送机制的实现1、实现原理ios消息推送的工作机制可以简单的用下图来概括：Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。
+上图可以分为三个阶段：
 
-个人开发者
-公司开发者
-组织开发者
-
-这里用个人为例
-7、填写个人信息上面用中文，下面用英文，填写好后同意协议，下一步
-8、下一步
-9、进入付款界面
-10、在此确定账号
-11、付款完成付款完成后，等待大概十分钟就收到邮件">
+应用程序要把发送的消息、目的iPhone的表示打包，发给APNS.
+APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS开发者申请流程">
-<meta property="og:url" content="http://yoursite.com/2016/01/01/开发者申请流程/index.html">
+<meta property="og:title" content="iOS推送机制的实现">
+<meta property="og:url" content="http://yoursite.com/2016/01/07/ios推送机制的实现/index.html">
 <meta property="og:site_name" content="Haifeng Wang’s Blog">
-<meta property="og:description" content="iOS开发者申请流程1、进入官网选择Programs
-2、点击进入
-3、同意协议
-4、登录apple id
-5、同意协议
-6、选择申请的类型从上往下依次是
+<meta property="og:description" content="iOS推送机制的实现1、实现原理ios消息推送的工作机制可以简单的用下图来概括：Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。
+上图可以分为三个阶段：
 
-个人开发者
-公司开发者
-组织开发者
-
-这里用个人为例
-7、填写个人信息上面用中文，下面用英文，填写好后同意协议，下一步
-8、下一步
-9、进入付款界面
-10、在此确定账号
-11、付款完成付款完成后，等待大概十分钟就收到邮件">
-<meta property="og:image" content="http://c.hiphotos.baidu.com/exp/w=500/sign=b5f9a4d61a30e924cfa49c317c0a6e66/0df3d7ca7bcb0a4640ee32e76e63f6246a60af24.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=1eb06a109c25bc312b5d01986ede8de7/71cf3bc79f3df8dce245304fc811728b461028f7.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=cece2cf0add3fd1f3609a23a004f25ce/50da81cb39dbb6fd1e235af80c24ab18962b37f7.jpg">
-<meta property="og:image" content="http://g.hiphotos.baidu.com/exp/w=500/sign=2ac40ae41cd8bc3ec60806cab28aa6c8/7c1ed21b0ef41bd5eb2b572a54da81cb38db3df7.jpg">
-<meta property="og:image" content="http://h.hiphotos.baidu.com/exp/w=500/sign=5e613277ac014c08193b28a53a7a025b/0b46f21fbe096b634161e18e09338744eaf8acf0.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=b34da2d61a30e924cfa49c317c096e66/0df3d7ca7bcb0a46465a34e76e63f6246a60aff0.jpg">
-<meta property="og:image" content="http://f.hiphotos.baidu.com/exp/w=500/sign=294ac115feedab6474724dc0c737af81/29381f30e924b8992444c6e66b061d950b7bf6f0.jpg">
-<meta property="og:image" content="http://h.hiphotos.baidu.com/exp/w=500/sign=245c612ab24543a9f51bfacc2e168a7b/7af40ad162d9f2d3c0699b31acec8a136227ccf0.jpg">
-<meta property="og:image" content="http://c.hiphotos.baidu.com/exp/w=500/sign=23530d253cdbb6fd255be5263925aba6/cefc1e178a82b90138197aed768da9773812efbc.jpg">
-<meta property="og:image" content="http://b.hiphotos.baidu.com/exp/w=500/sign=a39c783d522c11dfded1bf2353266255/500fd9f9d72a6059e4685ec42d34349b023bbaf0.jpg">
-<meta property="og:image" content="http://a.hiphotos.baidu.com/exp/w=500/sign=b1c9334fc811728b302d8c22f8fec3b3/d043ad4bd11373f0e2cbd341a10f4bfbfaed0473.jpg">
-<meta property="og:updated_time" content="2016-01-07T06:25:10.000Z">
+应用程序要把发送的消息、目的iPhone的表示打包，发给APNS.
+APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617605/322782e2-f9a1-3836-9ffe-9257e2fca12c.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617607/8deb07df-1356-3aed-8c2e-3e41d25d4e2f.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617609/bea39b68-db6c-343a-85ee-15e9c20c343d.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617611/cd5e9289-f943-3e8a-804f-35f452238d95.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617613/4acd574b-6252-3842-94c2-1d60f2a27b21.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617615/1b41636d-58ac-34c2-b31c-073185dbbaef.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617618/c4644192-38b2-3b0c-bfd1-105ab850ce47.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/617620/2671d2ca-2b34-30a1-88da-5406b0d33c7f.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8004/36feeefd-ee3b-3341-90d6-5041fb6cccce.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8008/0347ea0a-e06b-3425-aa40-40e92f0b59c2.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8010/35e7eeb7-7b84-3352-89fd-1ea5049327c8.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8012/2d28e16e-f9c2-3f0f-98a6-0c92cf3d517e.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8016/e681263d-14a4-3b66-9e50-5e71c645bdc0.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8018/fab8eb43-56c7-300f-bb67-f722ce09a2b9.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/0061/8025/72f36fed-4f10-32fb-8dbc-940fad8610bb.jpg">
+<meta property="og:updated_time" content="2016-01-07T07:14:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS开发者申请流程">
-<meta name="twitter:description" content="iOS开发者申请流程1、进入官网选择Programs
-2、点击进入
-3、同意协议
-4、登录apple id
-5、同意协议
-6、选择申请的类型从上往下依次是
+<meta name="twitter:title" content="iOS推送机制的实现">
+<meta name="twitter:description" content="iOS推送机制的实现1、实现原理ios消息推送的工作机制可以简单的用下图来概括：Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。
+上图可以分为三个阶段：
 
-个人开发者
-公司开发者
-组织开发者
-
-这里用个人为例
-7、填写个人信息上面用中文，下面用英文，填写好后同意协议，下一步
-8、下一步
-9、进入付款界面
-10、在此确定账号
-11、付款完成付款完成后，等待大概十分钟就收到邮件">
+应用程序要把发送的消息、目的iPhone的表示打包，发给APNS.
+APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示">
 
 
 
@@ -133,7 +101,7 @@
   };
 </script>
 
-  <title> iOS开发者申请流程 | Haifeng Wang’s Blog </title>
+  <title> iOS推送机制的实现 | Haifeng Wang’s Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -273,7 +241,7 @@
             
             
               
-                iOS开发者申请流程
+                iOS推送机制的实现
               
             
           </h1>
@@ -282,8 +250,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-01T14:12:40+08:00" content="2016-01-01">
-              2016-01-01
+            <time itemprop="dateCreated" datetime="2016-01-07T15:11:34+08:00" content="2016-01-07">
+              2016-01-07
             </time>
           </span>
 
@@ -308,8 +276,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/01/开发者申请流程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/01/开发者申请流程/" itemprop="commentsCount"></span>
+                <a href="/2016/01/07/ios推送机制的实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/07/ios推送机制的实现/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -328,23 +296,83 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="iOS开发者申请流程">iOS开发者申请流程</h2><h3 id="1、进入官网">1、<a href="https://developer.apple.com/" target="_blank" rel="external">进入官网</a></h3><p>选择Programs<br><img src="http://c.hiphotos.baidu.com/exp/w=500/sign=b5f9a4d61a30e924cfa49c317c0a6e66/0df3d7ca7bcb0a4640ee32e76e63f6246a60af24.jpg" alt="image"></p>
-<h3 id="2、点击进入">2、点击进入</h3><p><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=1eb06a109c25bc312b5d01986ede8de7/71cf3bc79f3df8dce245304fc811728b461028f7.jpg" alt="image"></p>
-<h3 id="3、同意协议">3、同意协议</h3><p><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=cece2cf0add3fd1f3609a23a004f25ce/50da81cb39dbb6fd1e235af80c24ab18962b37f7.jpg" alt="image"></p>
-<h3 id="4、登录apple_id">4、登录apple id</h3><p><img src="http://g.hiphotos.baidu.com/exp/w=500/sign=2ac40ae41cd8bc3ec60806cab28aa6c8/7c1ed21b0ef41bd5eb2b572a54da81cb38db3df7.jpg" alt="image"></p>
-<h3 id="5、同意协议">5、同意协议</h3><p><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=5e613277ac014c08193b28a53a7a025b/0b46f21fbe096b634161e18e09338744eaf8acf0.jpg" alt="image"></p>
-<h3 id="6、选择申请的类型">6、选择申请的类型</h3><p>从上往下依次是</p>
+        <span itemprop="articleBody"><h2 id="iOS推送机制的实现">iOS推送机制的实现</h2><h3 id="1、实现原理">1、实现原理</h3><p>ios消息推送的工作机制可以简单的用下图来概括：<br><img src="http://dl.iteye.com/upload/attachment/617605/322782e2-f9a1-3836-9ffe-9257e2fca12c.jpg" alt="image"><br>Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。</p>
+<p>上图可以分为三个阶段：</p>
 <ol>
-<li>个人开发者</li>
-<li>公司开发者</li>
-<li>组织开发者</li>
+<li>应用程序要把发送的消息、目的iPhone的表示打包，发给APNS.</li>
+<li>APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示的iPhone，并把消息发送给iPhone。</li>
+<li>iPhone把发来的消息传递给相应的应用程序，并且按照设定弹出Push通知。</li>
 </ol>
-<p>这里用个人为例</p>
-<h3 id="7、填写个人信息">7、填写个人信息</h3><p>上面用中文，下面用英文，填写好后同意协议，下一步<br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=b34da2d61a30e924cfa49c317c096e66/0df3d7ca7bcb0a46465a34e76e63f6246a60aff0.jpg" alt="image"><br><img src="http://f.hiphotos.baidu.com/exp/w=500/sign=294ac115feedab6474724dc0c737af81/29381f30e924b8992444c6e66b061d950b7bf6f0.jpg" alt="image"></p>
-<h3 id="8、下一步">8、下一步</h3><p><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=245c612ab24543a9f51bfacc2e168a7b/7af40ad162d9f2d3c0699b31acec8a136227ccf0.jpg" alt="image"></p>
-<h3 id="9、进入付款界面">9、进入付款界面</h3><p><img src="http://c.hiphotos.baidu.com/exp/w=500/sign=23530d253cdbb6fd255be5263925aba6/cefc1e178a82b90138197aed768da9773812efbc.jpg" alt="image"></p>
-<h3 id="10、在此确定账号">10、在此确定账号</h3><p><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=a39c783d522c11dfded1bf2353266255/500fd9f9d72a6059e4685ec42d34349b023bbaf0.jpg" alt="image"></p>
-<h3 id="11、付款完成">11、付款完成</h3><p>付款完成后，等待大概十分钟就收到邮件<br><img src="http://a.hiphotos.baidu.com/exp/w=500/sign=b1c9334fc811728b302d8c22f8fec3b3/d043ad4bd11373f0e2cbd341a10f4bfbfaed0473.jpg" alt="image"></p>
+<p><img src="http://dl.iteye.com/upload/attachment/617607/8deb07df-1356-3aed-8c2e-3e41d25d4e2f.jpg" alt="image"><br>从上图我们可以看到：</p>
+<ol>
+<li>应用程序注册消息推送</li>
+<li>iOS从APNS 获取到device token，应用程序接收device token</li>
+<li>应用程序将device token发送给push服务器</li>
+<li>服务端程序向APNS服务发送消息</li>
+<li>APNS服务器将消息发送给iPhone应用程序</li>
+</ol>
+<p>无论是iPhone客户端和APNS,还是Provider和APNS，都需要证书进行连接</p>
+<h3 id="2、下面我们介绍一下几种用到的证书">2、下面我们介绍一下几种用到的证书</h3><h4 id="1、CSR文件">1、CSR文件</h4><ol>
+<li><p>生成CSR文件<br><img src="http://dl.iteye.com/upload/attachment/617609/bea39b68-db6c-343a-85ee-15e9c20c343d.jpg" alt="image"></p>
+</li>
+<li><p>填写你的邮箱和常用名称，并选择保存到磁盘<br><img src="http://dl.iteye.com/upload/attachment/617611/cd5e9289-f943-3e8a-804f-35f452238d95.jpg" alt="image"></p>
+</li>
+<li><p>点击继续，保存到桌面<br><img src="http://dl.iteye.com/upload/attachment/617613/4acd574b-6252-3842-94c2-1d60f2a27b21.jpg" alt="image"></p>
+</li>
+</ol>
+<p>这样我们本地就生成了一个Push.certSigningRequest文件</p>
+<h4 id="2、p12文件">2、p12文件</h4><ol>
+<li>导出秘钥<br>打开钥匙串访问<br><img src="http://dl.iteye.com/upload/attachment/617615/1b41636d-58ac-34c2-b31c-073185dbbaef.jpg" alt="image"><br><img src="http://dl.iteye.com/upload/attachment/617618/c4644192-38b2-3b0c-bfd1-105ab850ce47.jpg" alt="image"></li>
+<li>输入密码<br><img src="http://dl.iteye.com/upload/attachment/617620/2671d2ca-2b34-30a1-88da-5406b0d33c7f.jpg" alt="image"></li>
+</ol>
+<p>这样我们就生成了一个p12文件</p>
+<h3 id="3、SSL_centificate文件">3、SSL centificate文件</h3><ol>
+<li>用你付过费的账号登陆到iOS Provisioning Portal，这个过程可以参考<a href="http://whfwudi.github.io/2016/01/02/ios%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95%E6%AD%A5%E9%AA%A4/" target="_blank" rel="external">iOS真机调试</a>，这样就会生成一条类似下图所示的记录<br><img src="http://dl.iteye.com/upload/attachment/0061/8004/36feeefd-ee3b-3341-90d6-5041fb6cccce.jpg" alt="image"></li>
+<li>点击右侧的Config：<br><img src="http://dl.iteye.com/upload/attachment/0061/8008/0347ea0a-e06b-3425-aa40-40e92f0b59c2.jpg" alt="image"></li>
+<li>点击Development Push SSL Certificate一行后的Configure：<br><img src="http://dl.iteye.com/upload/attachment/0061/8010/35e7eeb7-7b84-3352-89fd-1ea5049327c8.jpg" alt="image"></li>
+<li>点击Continue<br><img src="http://dl.iteye.com/upload/attachment/0061/8012/2d28e16e-f9c2-3f0f-98a6-0c92cf3d517e.jpg" alt="image"></li>
+<li>选择前面生成好的Push.certSigningRequest文件，点击Generate，出现如下所示的页面：<br><img src="http://dl.iteye.com/upload/attachment/0061/8016/e681263d-14a4-3b66-9e50-5e71c645bdc0.jpg" alt="image"></li>
+<li>点击Continue<br><img src="http://dl.iteye.com/upload/attachment/0061/8018/fab8eb43-56c7-300f-bb67-f722ce09a2b9.jpg" alt="image"></li>
+<li>点击Download，并将文件命名为aps_developer_identity.cer</li>
+<li>点击Done，你会发现状态变成了Enabled：<br><img src="http://dl.iteye.com/upload/attachment/0061/8025/72f36fed-4f10-32fb-8dbc-940fad8610bb.jpg" alt="image"><br>注意：有的Apple ID的Apple Push Notification service列是灰色的，并且不允许使用Configure按钮，这是因为APNS不支持带通配符的App ID。</li>
+</ol>
+<p>到现在为止，我们已经生成了三个文件：</p>
+<ol>
+<li>Push.certSigningRequest</li>
+<li>Push.p12</li>
+<li>aps_developer_identity.cer</li>
+</ol>
+<h3 id="4、在项目中配置推送">4、在项目中配置推送</h3><ol>
+<li>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</li>
+</ol>
+<p><code>[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)];</code></p>
+<ol>
+<li>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</li>
+</ol>
+<p><code>- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {     
+    NSString *token = [NSString stringWithFormat:@&quot;%@&quot;, deviceToken];  
+    NSLog(@&quot;My token is:%@&quot;, token);  
+}</code>  </p>
+<p><code>- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {      
+    NSString *error_str = [NSString stringWithFormat: @&quot;%@&quot;, error];  
+    NSLog(@&quot;Failed to get token, error:%@&quot;, error_str);  
+}</code>  </p>
+<p>获取到的deviceToken，我们可以提交给后台应用程序，发送通知的后台应用程序除了需要知道deviceToken之外，还需要一个与APNS连接的证书。<br>这个证书可以通过我们前面生成的两个文件中得到。</p>
+<ol>
+<li>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</li>
+</ol>
+<p><code>openssl x509 -in aps_developer_identity.cer -inform DER -out aps_developer_identity.pem -outform PEM</code></p>
+<ol>
+<li>将p12格式的私钥转换成pem</li>
+</ol>
+<p><code>openssl pkcs12 -nocerts -out Push_Noenc.pem -in Push.p12</code></p>
+<ol>
+<li>创建p12文件</li>
+</ol>
+<p><code>openssl pkcs12 -export -in aps_developer_identity.pem -inkey Push_Noenc.pem -certfile Push.certSigningRequest -name &quot;aps_developer_identity&quot; -out aps_developer_identity.p12</code></p>
+<p>这样我们就得到了在.net或java等后台应用程序中使用的证书文件：aps_developer_identity.p12</p>
+<p>如果后台应用是php的话,双击aps_developer_identity.cer，将其安装到电脑上，钥匙串选择登录，种类选择所有项目，在右侧列表中选中push的证书以及对应的专用密钥，并导出2项，命名为ck.p12。</p>
+<p><code>openssl pkcs12 -in ck.p12 -out ck.pem -nodes</code></p>
 </span>
       
     </div>
@@ -353,7 +381,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/iOS开发者申请流程/" rel="tag">#iOS开发者申请流程</a>
+            <a href="/tags/iOS推送机制的实现/" rel="tag">#iOS推送机制的实现</a>
           
         </div>
       
@@ -362,17 +390,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/01/06/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/01/06/Markdown/" rel="next" title="Markdown">
+                <i class="fa fa-chevron-left"></i> Markdown
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/02/ios真机调试步骤/" rel="prev" title="iOS真机调试步骤">
-                iOS真机调试步骤 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -399,8 +423,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/01/开发者申请流程/"
-           data-title="iOS开发者申请流程" data-url="http://yoursite.com/2016/01/01/开发者申请流程/">
+      <div class="ds-thread" data-thread-key="2016/01/07/ios推送机制的实现/"
+           data-title="iOS推送机制的实现" data-url="http://yoursite.com/2016/01/07/ios推送机制的实现/">
       </div>
     
   </div>
@@ -496,7 +520,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS开发者申请流程"><span class="nav-number">1.</span> <span class="nav-text">iOS开发者申请流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、进入官网"><span class="nav-number">1.1.</span> <span class="nav-text">1、进入官网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、点击进入"><span class="nav-number">1.2.</span> <span class="nav-text">2、点击进入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、同意协议"><span class="nav-number">1.3.</span> <span class="nav-text">3、同意协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、登录apple_id"><span class="nav-number">1.4.</span> <span class="nav-text">4、登录apple id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、同意协议"><span class="nav-number">1.5.</span> <span class="nav-text">5、同意协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6、选择申请的类型"><span class="nav-number">1.6.</span> <span class="nav-text">6、选择申请的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7、填写个人信息"><span class="nav-number">1.7.</span> <span class="nav-text">7、填写个人信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8、下一步"><span class="nav-number">1.8.</span> <span class="nav-text">8、下一步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9、进入付款界面"><span class="nav-number">1.9.</span> <span class="nav-text">9、进入付款界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10、在此确定账号"><span class="nav-number">1.10.</span> <span class="nav-text">10、在此确定账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11、付款完成"><span class="nav-number">1.11.</span> <span class="nav-text">11、付款完成</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS推送机制的实现"><span class="nav-number">1.</span> <span class="nav-text">iOS推送机制的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、实现原理"><span class="nav-number">1.1.</span> <span class="nav-text">1、实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、下面我们介绍一下几种用到的证书"><span class="nav-number">1.2.</span> <span class="nav-text">2、下面我们介绍一下几种用到的证书</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、CSR文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">1、CSR文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、p12文件"><span class="nav-number">1.2.2.</span> <span class="nav-text">2、p12文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、SSL_centificate文件"><span class="nav-number">1.3.</span> <span class="nav-text">3、SSL centificate文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、在项目中配置推送"><span class="nav-number">1.4.</span> <span class="nav-text">4、在项目中配置推送</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
