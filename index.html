@@ -489,11 +489,11 @@ inviteCategory setActions:@[acceptAction] forContext:<span class="built_in">UIUs
 <li>Settings</li>
 </ol>
 <p>在这些行为注册之后，我们加上之前提到的推送设置就完成了注册推送的这个流程了</p>
-<p><code>NSSet *categories = [NSSet setWithObjects:inviteCategory, nil nil];  
-UIUserNotificationType  types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert ;  
-UIUserNotificationSettings  *mySettings  = [UIUserNotificationSettings settingsForTypes:types categories:categories];  
-[[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];</code></p>
-<h3 id="2、远程推送">2、远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
+<pre><code>`<span class="built_in">NSSet</span> *categories = [<span class="built_in">NSSet</span> setWithObjects:inviteCategory, <span class="literal">nil</span> <span class="literal">nil</span>];  
+<span class="built_in">UIUserNotificationType</span>  types = <span class="built_in">UIUserNotificationTypeBadge</span> | <span class="built_in">UIUserNotificationTypeSound</span> | <span class="built_in">UIUserNotificationTypeAlert</span> ;  
+<span class="built_in">UIUserNotificationSettings</span>  *mySettings  = [<span class="built_in">UIUserNotificationSettings</span> settingsForTypes:types categories:categories];  
+[[<span class="built_in">UIApplication</span> sharedApplication] registerUserNotificationSettings:mySettings];  `
+</code></pre><h3 id="2、远程推送">2、远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
 <pre><code>`{  
         “aps”: {  
            <span class="string">"content-available"</span>: <span class="number">1</span>,  
