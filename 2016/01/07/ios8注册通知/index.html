@@ -60,11 +60,11 @@
 远程推送
 地理位置推送
 
-1、用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
+用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
 `if (IS_IOS8) {  
 
     //1.创建消息上面要添加的动作(按钮的形式显示出来)  
-    UIMutableUserNotificationAction *action = [[UIMutableUse">
+    UIMutableUserNotificationAction *action = [[UIMutableUserN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ios8注册通知">
 <meta property="og:url" content="http://yoursite.com/2016/01/07/ios8注册通知/index.html">
@@ -76,11 +76,11 @@
 远程推送
 地理位置推送
 
-1、用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
+用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
 `if (IS_IOS8) {  
 
     //1.创建消息上面要添加的动作(按钮的形式显示出来)  
-    UIMutableUserNotificationAction *action = [[UIMutableUse">
+    UIMutableUserNotificationAction *action = [[UIMutableUserN">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/626e5d69gw1ehyeq298goj21kw0sadmt.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/626e5d69gw1ehyeyi825mj21aa12ggoc.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/626e5d69gw1ehyf4bfhvrj20q80zytaw.jpg">
@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/626e5d69gw1ehyg8u1o51j21ea0qkmz1.jpg">
-<meta property="og:updated_time" content="2016-01-07T09:46:44.000Z">
+<meta property="og:updated_time" content="2016-01-08T03:01:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ios8注册通知">
 <meta name="twitter:description" content="iOS推送目前分为四种：
@@ -99,11 +99,11 @@
 远程推送
 地理位置推送
 
-1、用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
+用户推送先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送注册过程：
 `if (IS_IOS8) {  
 
     //1.创建消息上面要添加的动作(按钮的形式显示出来)  
-    UIMutableUserNotificationAction *action = [[UIMutableUse">
+    UIMutableUserNotificationAction *action = [[UIMutableUserN">
 
 
 
@@ -307,7 +307,7 @@
 <li>远程推送</li>
 <li>地理位置推送<br><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyeq298goj21kw0sadmt.jpg" alt="image"></li>
 </ol>
-<h3 id="1、用户推送">1、用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：</p>
+<h3 id="用户推送">用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：</p>
 <pre><code>`<span class="keyword">if</span> (IS_IOS8) {  
 
     <span class="comment">//1.创建消息上面要添加的动作(按钮的形式显示出来)  </span>
@@ -376,7 +376,7 @@ inviteCategory setActions:@[acceptAction] forContext:<span class="built_in">UIUs
 <span class="built_in">UIUserNotificationType</span>  types = <span class="built_in">UIUserNotificationTypeBadge</span> | <span class="built_in">UIUserNotificationTypeSound</span> | <span class="built_in">UIUserNotificationTypeAlert</span> ;  
 <span class="built_in">UIUserNotificationSettings</span>  *mySettings  = [<span class="built_in">UIUserNotificationSettings</span> settingsForTypes:types categories:categories];  
 [[<span class="built_in">UIApplication</span> sharedApplication] registerUserNotificationSettings:mySettings];  `
-</code></pre><h3 id="2、远程推送">2、远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
+</code></pre><h3 id="远程推送">远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
 <pre><code>`{  
         “aps”: {  
            <span class="string">"content-available"</span>: <span class="number">1</span>,  
@@ -404,7 +404,7 @@ inviteCategory setActions:@[acceptAction] forContext:<span class="built_in">UIUs
 <li><p>在info.plist文件中UIBackgroundModes必须包含远程通知。</p>
 </li>
 </ol>
-<h3 id="3、iOS7通知代理方法">3、iOS7通知代理方法</h3><p><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfq2omeij21kw0zc456.jpg" alt="image"><br>后来又增加了本地通知的代理方法<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg" alt="image"><br>iOS8的推送代理方法只有两个了<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg" alt="image"></p>
+<h3 id="iOS7通知代理方法">iOS7通知代理方法</h3><p><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfq2omeij21kw0zc456.jpg" alt="image"><br>后来又增加了本地通知的代理方法<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg" alt="image"><br>iOS8的推送代理方法只有两个了<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg" alt="image"></p>
 <pre><code>`- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forLocalNotification:    <span class="params">(UILocalNotification *)</span>notification completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
 {  
 }  
@@ -424,7 +424,7 @@ completionHandler<span class="params">()</span>;
 - <span class="params">(void)</span>handleAcceptActionWithNotification:<span class="params">(UILocalNotification*)</span>notification  
 {  
 }  `
-</code></pre><h3 id="4、地理位置推送">4、地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
+</code></pre><h3 id="地理位置推送">地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
 <pre><code>`<span class="comment">//Location Notification  </span>
 CLLocationManager *locMan = [[CLLocationManager alloc] init];  
 locMan<span class="variable">.delegate</span> = <span class="keyword">self</span>;  
@@ -565,14 +565,14 @@ locNotification<span class="variable">.region</span> = [[CLCircularRegion alloc]
 
           <div class="site-state-item site-state-categories">
             
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">分类</span>
               
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -610,7 +610,7 @@ locNotification<span class="variable">.region</span> = [[CLCircularRegion alloc]
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、用户推送"><span class="nav-number">1.</span> <span class="nav-text">1、用户推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、远程推送"><span class="nav-number">2.</span> <span class="nav-text">2、远程推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、iOS7通知代理方法"><span class="nav-number">3.</span> <span class="nav-text">3、iOS7通知代理方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、地理位置推送"><span class="nav-number">4.</span> <span class="nav-text">4、地理位置推送</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户推送"><span class="nav-number">1.</span> <span class="nav-text">用户推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程推送"><span class="nav-number">2.</span> <span class="nav-text">远程推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS7通知代理方法"><span class="nav-number">3.</span> <span class="nav-text">iOS7通知代理方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#地理位置推送"><span class="nav-number">4.</span> <span class="nav-text">地理位置推送</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
