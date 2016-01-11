@@ -189,15 +189,115 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/11/block与-weak/" itemprop="url">
+                  __block与__weak
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-11T14:30:18+08:00" content="2016-01-11">
+              2016-01-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/11/block与-weak/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/11/block与-weak/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="__block">__block</h3><p>block可以访问局部变量，但是是不能修改的，如果想要修改局部变量，需要加__block 修饰局部变量<br>代码为：</p>
+<pre><code>` __block <span class="built_in">int</span> multiplier = <span class="number">7</span>;
+     <span class="built_in">int</span> (^myBlock)(<span class="built_in">int</span>) = ^(<span class="built_in">int</span> <span class="built_in">num</span>) {
+         multiplier ++;
+         <span class="keyword">return</span> <span class="built_in">num</span> * multiplier;
+     };`
+</code></pre><h3 id="__weak">__weak</h3><p><strong>weak </strong>typeof(&amp;<em>self)weakSelf = self; 等同于 __weak UIViewController </em>weakSelf = self;<br><strong>block是通过引用来访问self的实例变量，self被retain，block也是一个强引用，硬气循环引用，用</strong>weak是弱引用，当self释放的时候，weakSelf已经等于nil</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1466,7 +1566,7 @@ locNotification<span class="variable">.region</span> = [[CLCircularRegion alloc]
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
