@@ -53,51 +53,28 @@
 
 
 
-<meta name="description" content="iOS真机调试步骤获取真机调试的证书先在本地生成获取证书的文件、找不到钥匙串可以直接用mac电脑的搜索功能
-请求证书点击钥匙串访问-&amp;gt;证书助理-&amp;gt;从证书颁发机构申请证书
-填写相关信息在用户电子邮件地址中填写开发者账号，然后点击存储到磁盘，再点击继续
-保存路径和生成文件的名字选择保存在桌面（Desktop），然后点击存储然后就在桌面生成了一个文件
-点击进入开发者中心，然后进入个人中心
-进">
+<meta name="description" content="今天遇到了一个功能，就是把tableview上的删除按钮自定义一下，这个功能以前倒是遇到过，但是没有做一个总结，今天就来讲一下tableview上的删除按钮的自定义，也给自己做一个总结。
+新建tableview实现代理这个就不说了，作为一个iOS开发者，tableview是必须要会玩的，总要讲的是三个代理方法，这三个方法才是实现功能的三个方法。
+
+
+(BOOL)tableView:(UITable">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS真机调试步骤">
-<meta property="og:url" content="http://yoursite.com/2016/01/02/ios真机调试步骤/index.html">
+<meta property="og:title" content="UITableView删除按钮的自定义">
+<meta property="og:url" content="http://yoursite.com/2016/01/11/UITableView删除按钮的自定义/index.html">
 <meta property="og:site_name" content="Haifeng Wang’s Blog">
-<meta property="og:description" content="iOS真机调试步骤获取真机调试的证书先在本地生成获取证书的文件、找不到钥匙串可以直接用mac电脑的搜索功能
-请求证书点击钥匙串访问-&amp;gt;证书助理-&amp;gt;从证书颁发机构申请证书
-填写相关信息在用户电子邮件地址中填写开发者账号，然后点击存储到磁盘，再点击继续
-保存路径和生成文件的名字选择保存在桌面（Desktop），然后点击存储然后就在桌面生成了一个文件
-点击进入开发者中心，然后进入个人中心
-进">
-<meta property="og:image" content="http://c.hiphotos.baidu.com/exp/w=500/sign=c9ae1895d362853592e0d221a0ee76f2/18d8bc3eb13533fad075f149aed3fd1f40345b91.jpg">
-<meta property="og:image" content="http://g.hiphotos.baidu.com/exp/w=500/sign=3e9756cc053b5bb5bed720fe06d2d523/00e93901213fb80e6d4f36b030d12f2eb938943e.jpg">
-<meta property="og:image" content="http://b.hiphotos.baidu.com/exp/w=500/sign=b8f7a8e86a81800a6ee5890e813433d6/8694a4c27d1ed21b675b7f82ab6eddc450da3fc2.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=44faa199c5fdfc03e578e3b8e43f87a9/a50f4bfbfbedab648f491aa7f136afc379311e99.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=f1c9c449aed3fd1f3609a23a004f25ce/50da81cb39dbb6fd2124b2410f24ab18972b375d.jpg">
-<meta property="og:image" content="http://b.hiphotos.baidu.com/exp/w=500/sign=ba88cb203f12b31bc76ccd29b6183674/908fa0ec08fa513def923bb93b6d55fbb2fbd999.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=c5346802b519ebc4c0787699b226cf79/0b7b02087bf40ad1dedc9084512c11dfa9ecce99.jpg">
-<meta property="og:image" content="http://f.hiphotos.baidu.com/exp/w=500/sign=90ff849a7d899e51788e3a1472a7d990/b151f8198618367a7fb128ba28738bd4b31ce599.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=f49a7d67ef24b899de3c79385e071d59/d6ca7bcb0a46f21f62ab0934f0246b600c33ae3e.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=fd32e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623dab6f2059e22720e0cf3d75d.jpg">
-<meta property="og:image" content="http://g.hiphotos.baidu.com/exp/w=500/sign=7fe1cf1cd71373f0f53f6f9f940e4b8b/8601a18b87d6277f308d655f2e381f30e924fc3e.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=fdd1e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623da55f2059e22720e0cf3d73e.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=0bb73814fdf2b211e42e854efa816511/e61190ef76c6a7efd594f641fbfaaf51f3de6622.jpg">
-<meta property="og:image" content="http://b.hiphotos.baidu.com/exp/w=500/sign=c803a0854dc2d562f208d0edd71090f3/810a19d8bc3eb13542c1b95ea41ea8d3fc1f44d4.jpg">
-<meta property="og:image" content="http://a.hiphotos.baidu.com/exp/w=500/sign=e26e88cce9c4b7453494b716fffd1e78/03087bf40ad162d91ae86cf913dfa9ec8b13cdd5.jpg">
-<meta property="og:image" content="http://f.hiphotos.baidu.com/exp/w=500/sign=689fe71153da81cb4ee683cd6264d0a4/42a98226cffc1e174f7383d44890f603728de903.jpg">
-<meta property="og:image" content="http://h.hiphotos.baidu.com/exp/w=500/sign=7ebf275f68061d957d4637384bf50a5d/bf096b63f6246b60db8dec13edf81a4c500fa2d2.jpg">
-<meta property="og:image" content="http://d.hiphotos.baidu.com/exp/w=500/sign=1294528cb0fd5266a72b3c149b199799/1f178a82b9014a90655c18daaf773912b31bee73.jpg">
-<meta property="og:image" content="http://h.hiphotos.baidu.com/exp/w=500/sign=dbaada6235fa828bd1239de3cd1e41cd/1ad5ad6eddc451dae65f528cb0fd5266d016322f.jpg">
-<meta property="og:image" content="http://e.hiphotos.baidu.com/exp/w=500/sign=6e4c087064d0f703e6b295dc38fb5148/d52a2834349b033bbfeaa2bd13ce36d3d539bd73.jpg">
-<meta property="og:updated_time" content="2016-01-08T03:02:33.000Z">
+<meta property="og:description" content="今天遇到了一个功能，就是把tableview上的删除按钮自定义一下，这个功能以前倒是遇到过，但是没有做一个总结，今天就来讲一下tableview上的删除按钮的自定义，也给自己做一个总结。
+新建tableview实现代理这个就不说了，作为一个iOS开发者，tableview是必须要会玩的，总要讲的是三个代理方法，这三个方法才是实现功能的三个方法。
+
+
+(BOOL)tableView:(UITable">
+<meta property="og:updated_time" content="2016-01-11T04:04:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS真机调试步骤">
-<meta name="twitter:description" content="iOS真机调试步骤获取真机调试的证书先在本地生成获取证书的文件、找不到钥匙串可以直接用mac电脑的搜索功能
-请求证书点击钥匙串访问-&amp;gt;证书助理-&amp;gt;从证书颁发机构申请证书
-填写相关信息在用户电子邮件地址中填写开发者账号，然后点击存储到磁盘，再点击继续
-保存路径和生成文件的名字选择保存在桌面（Desktop），然后点击存储然后就在桌面生成了一个文件
-点击进入开发者中心，然后进入个人中心
-进">
+<meta name="twitter:title" content="UITableView删除按钮的自定义">
+<meta name="twitter:description" content="今天遇到了一个功能，就是把tableview上的删除按钮自定义一下，这个功能以前倒是遇到过，但是没有做一个总结，今天就来讲一下tableview上的删除按钮的自定义，也给自己做一个总结。
+新建tableview实现代理这个就不说了，作为一个iOS开发者，tableview是必须要会玩的，总要讲的是三个代理方法，这三个方法才是实现功能的三个方法。
+
+
+(BOOL)tableView:(UITable">
 
 
 
@@ -109,7 +86,7 @@
   };
 </script>
 
-  <title> iOS真机调试步骤 | Haifeng Wang’s Blog </title>
+  <title> UITableView删除按钮的自定义 | Haifeng Wang’s Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +216,7 @@
             
             
               
-                iOS真机调试步骤
+                UITableView删除按钮的自定义
               
             
           </h1>
@@ -248,19 +225,34 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-02T14:10:20+08:00" content="2016-01-02">
-              2016-01-02
+            <time itemprop="dateCreated" datetime="2016-01-11T11:30:30+08:00" content="2016-01-11">
+              2016-01-11
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/02/ios真机调试步骤/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/02/ios真机调试步骤/" itemprop="commentsCount"></span>
+                <a href="/2016/01/11/UITableView删除按钮的自定义/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/11/UITableView删除按钮的自定义/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -279,21 +271,60 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="iOS真机调试步骤">iOS真机调试步骤</h2><h3 id="获取真机调试的证书">获取真机调试的证书</h3><p>先在本地生成获取证书的文件、找不到钥匙串可以直接用mac电脑的搜索功能<br><img src="http://c.hiphotos.baidu.com/exp/w=500/sign=c9ae1895d362853592e0d221a0ee76f2/18d8bc3eb13533fad075f149aed3fd1f40345b91.jpg" alt="搜索钥匙串访问"></p>
-<h3 id="请求证书">请求证书</h3><p>点击钥匙串访问-&gt;证书助理-&gt;从证书颁发机构申请证书<br><img src="http://g.hiphotos.baidu.com/exp/w=500/sign=3e9756cc053b5bb5bed720fe06d2d523/00e93901213fb80e6d4f36b030d12f2eb938943e.jpg" alt="请求证书"></p>
-<h3 id="填写相关信息">填写相关信息</h3><p>在用户电子邮件地址中填写开发者账号，然后点击存储到磁盘，再点击继续<br><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=b8f7a8e86a81800a6ee5890e813433d6/8694a4c27d1ed21b675b7f82ab6eddc450da3fc2.jpg" alt="image"></p>
-<h3 id="保存路径和生成文件的名字">保存路径和生成文件的名字</h3><p>选择保存在桌面（Desktop），然后点击存储<br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=44faa199c5fdfc03e578e3b8e43f87a9/a50f4bfbfbedab648f491aa7f136afc379311e99.jpg" alt="image"><br>然后就在桌面生成了一个文件<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=f1c9c449aed3fd1f3609a23a004f25ce/50da81cb39dbb6fd2124b2410f24ab18972b375d.jpg" alt="image"></p>
-<h3 id="点击进入开发者中心，然后进入个人中心">点击进入<a href="https://developer.apple.com/" target="_blank" rel="external">开发者中心</a>，然后进入个人中心</h3><p><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=ba88cb203f12b31bc76ccd29b6183674/908fa0ec08fa513def923bb93b6d55fbb2fbd999.jpg" alt="image"></p>
-<h3 id="进入证书颁发处">进入证书颁发处</h3><p><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=c5346802b519ebc4c0787699b226cf79/0b7b02087bf40ad1dedc9084512c11dfa9ecce99.jpg" alt="image"></p>
-<h3 id="点击iOS_Apps下的任何一项">点击iOS Apps下的任何一项</h3><p><img src="http://f.hiphotos.baidu.com/exp/w=500/sign=90ff849a7d899e51788e3a1472a7d990/b151f8198618367a7fb128ba28738bd4b31ce599.jpg" alt="image"><br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=f49a7d67ef24b899de3c79385e071d59/d6ca7bcb0a46f21f62ab0934f0246b600c33ae3e.jpg" alt="image"></p>
-<h3 id="添加证书">添加证书</h3><p>点击ALL 然后在点击右上角的加号，添加证书<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=fd32e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623dab6f2059e22720e0cf3d75d.jpg" alt="image"></p>
-<h3 id="选择iOS_App_Development">选择iOS App Development</h3><p><img src="http://g.hiphotos.baidu.com/exp/w=500/sign=7fe1cf1cd71373f0f53f6f9f940e4b8b/8601a18b87d6277f308d655f2e381f30e924fc3e.jpg" alt="image"></p>
-<h3 id="然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请">然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请</h3><p><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=fdd1e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623da55f2059e22720e0cf3d73e.jpg" alt="image"></p>
-<h3 id="添加App_IDs">添加App IDs</h3><p>点击App IDs，然后点击右上角的加号添加App IDs，填写必要的信息，然后一路Conitnus最后提交就可以了<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=0bb73814fdf2b211e42e854efa816511/e61190ef76c6a7efd594f641fbfaaf51f3de6622.jpg" alt="image"></p>
+        <span itemprop="articleBody"><p>  今天遇到了一个功能，就是把tableview上的删除按钮自定义一下，这个功能以前倒是遇到过，但是没有做一个总结，今天就来讲一下tableview上的删除按钮的自定义，也给自己做一个总结。</p>
+<h3 id="新建tableview实现代理">新建tableview实现代理</h3><p>这个就不说了，作为一个iOS开发者，tableview是必须要会玩的，总要讲的是三个代理方法，这三个方法才是实现功能的三个方法。</p>
 <ol>
-<li>name可以随便写，只要是英文的就可以，自己要记住</li>
-<li>Boundle ID是你需要添加真机测试的xcode工程的Boundle Identifier，点击工程的targets，选择general就可以查看到。<h3 id="绑定iPhone设备，然后填写设备信息，一直Continue就可以了">绑定iPhone设备，然后填写设备信息，一直Continue就可以了</h3>设备的UDID可以在iTunes中查看到，链接设备，点击手机图标，点击序列号就发生改变，里面有UDID字段<br><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=c803a0854dc2d562f208d0edd71090f3/810a19d8bc3eb13542c1b95ea41ea8d3fc1f44d4.jpg" alt="image"><br><img src="http://a.hiphotos.baidu.com/exp/w=500/sign=e26e88cce9c4b7453494b716fffd1e78/03087bf40ad162d91ae86cf913dfa9ec8b13cdd5.jpg" alt="image"><br><img src="http://f.hiphotos.baidu.com/exp/w=500/sign=689fe71153da81cb4ee683cd6264d0a4/42a98226cffc1e174f7383d44890f603728de903.jpg" alt="image"><h3 id="配置文件信息的填写">配置文件信息的填写</h3>点击加号创建新的卑职文件<br><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=7ebf275f68061d957d4637384bf50a5d/bf096b63f6246b60db8dec13edf81a4c500fa2d2.jpg" alt="image"><br>选择iOS App Development，下面两个是上架用和打包用的（企业证书）<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=1294528cb0fd5266a72b3c149b199799/1f178a82b9014a90655c18daaf773912b31bee73.jpg" alt="image"><br>然后绑定我们在前面申请的appID，调试证书和设备信息，然后一直点击Continus，最后我们把申请完的配置文件下载到本地，双击打开就可以了<br><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=dbaada6235fa828bd1239de3cd1e41cd/1ad5ad6eddc451dae65f528cb0fd5266d016322f.jpg" alt="image"><br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=6e4c087064d0f703e6b295dc38fb5148/d52a2834349b033bbfeaa2bd13ce36d3d539bd73.jpg" alt="image"><h3 id="注意事项">注意事项</h3>如果只是需要添加设备进行调试的话，先把设备添加到Devices中，然后修改配置文件就行了，其他的都不不要修改，双击下载的文件，新添加的设备就可以调试了</li>
+<li><ul>
+<li><p>(BOOL)tableView:(UITableView <em>)tableView canEditRowAtIndexPath:(NSIndexPath </em>)indexPath;<br>实现方法为：</p>
+<p>   <code>-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath { return TRUE; }</code></p>
+</li>
+</ul>
+</li>
 </ol>
+<p>这个方法的意思是允许tableview进行edit操作，而且可以定位到每一个indexPath，这个我全部返回了TRUE,就是全部都可以edit。</p>
+<ol>
+<li><ul>
+<li><p>(nullable NSString <em>)tableView:(UITableView </em>)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0) __TVOS_PROHIBITED;<br>实现方法为：</p>
+<p>   <code>-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath         *)indexPath { return @&quot;信息&quot;; }</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>这个方法的意思是自定义删除按钮返回的title，默认的是Delete，这里可以根据需求自定义返回需要的字符串。</p>
+<ol>
+<li><ul>
+<li><p>(void)tableView:(UITableView <em>)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath </em>)indexPath;<br>实现方法：</p>
+<pre><code>`-(<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView commitEditingStyle:(<span class="built_in">UITableViewCellEditingStyle</span>)editingStyle         forRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
+{
+<span class="keyword">switch</span> (editingStyle) {
+        <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleDelete</span>:
+
+           <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleInsert</span>:
+
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleNone</span>:
+
+            <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="keyword">break</span>;
+}
+</code></pre><p>   }`</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>这个方法就是实现删除按钮操作的方法，就是我们现在的信息按钮，在这个方法中就可以实现我们想要实现的方法。</p>
+<h3 id="自定义删除按钮的颜色等等">自定义删除按钮的颜色等等</h3><p>这个是比较有侵入性的方法，慎用，有可能不让上线，但是我觉得如果自定义的非常好，应该是没有问题的把，具体的我也没尝试过。<br>新建继承与UITableViewCell的MITableViewCell，实现layoutSubviews，实现方法为：</p>
+<pre><code>`- (<span class="keyword">void</span>)layoutSubviews 
+{
+    [<span class="keyword">super</span> layoutSubviews]; <span class="keyword">for</span> (<span class="built_in">UIView</span> *subView <span class="keyword">in</span> <span class="keyword">self</span><span class="variable">.subviews</span>) {
+            <span class="keyword">if</span> ([<span class="built_in">NSStringFromClass</span>([subView class]) isEqualToString:<span class="string">@"UITableViewCellDeleteConfirmationView"</span>]) {
+                ((<span class="built_in">UIView</span> *)[subView<span class="variable">.subviews</span> firstObject])<span class="variable">.backgroundColor</span> = [<span class="built_in">UIColor</span> lightGrayColor];
+            }
+        }
+}`
+</code></pre><p>在这个方法中就可以自定义删除按钮的颜色等等</p>
 </span>
       
     </div>
@@ -311,17 +342,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/01/开发者申请流程/" rel="next" title="iOS开发者申请流程">
-                <i class="fa fa-chevron-left"></i> iOS开发者申请流程
+              <a href="/2016/01/08/OSX10-11更新cocoapods/" rel="next" title="OSX10.11更新cocoapods和使用">
+                <i class="fa fa-chevron-left"></i> OSX10.11更新cocoapods和使用
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/07/ios推送机制的实现/" rel="prev" title="iOS推送机制的实现">
-                iOS推送机制的实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -348,8 +375,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/02/ios真机调试步骤/"
-           data-title="iOS真机调试步骤" data-url="http://yoursite.com/2016/01/02/ios真机调试步骤/">
+      <div class="ds-thread" data-thread-key="2016/01/11/UITableView删除按钮的自定义/"
+           data-title="UITableView删除按钮的自定义" data-url="http://yoursite.com/2016/01/11/UITableView删除按钮的自定义/">
       </div>
     
   </div>
@@ -445,7 +472,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS真机调试步骤"><span class="nav-number">1.</span> <span class="nav-text">iOS真机调试步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取真机调试的证书"><span class="nav-number">1.1.</span> <span class="nav-text">获取真机调试的证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求证书"><span class="nav-number">1.2.</span> <span class="nav-text">请求证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#填写相关信息"><span class="nav-number">1.3.</span> <span class="nav-text">填写相关信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存路径和生成文件的名字"><span class="nav-number">1.4.</span> <span class="nav-text">保存路径和生成文件的名字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点击进入开发者中心，然后进入个人中心"><span class="nav-number">1.5.</span> <span class="nav-text">点击进入开发者中心，然后进入个人中心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进入证书颁发处"><span class="nav-number">1.6.</span> <span class="nav-text">进入证书颁发处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点击iOS_Apps下的任何一项"><span class="nav-number">1.7.</span> <span class="nav-text">点击iOS Apps下的任何一项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加证书"><span class="nav-number">1.8.</span> <span class="nav-text">添加证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择iOS_App_Development"><span class="nav-number">1.9.</span> <span class="nav-text">选择iOS App Development</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请"><span class="nav-number">1.10.</span> <span class="nav-text">然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加App_IDs"><span class="nav-number">1.11.</span> <span class="nav-text">添加App IDs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定iPhone设备，然后填写设备信息，一直Continue就可以了"><span class="nav-number">1.12.</span> <span class="nav-text">绑定iPhone设备，然后填写设备信息，一直Continue就可以了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件信息的填写"><span class="nav-number">1.13.</span> <span class="nav-text">配置文件信息的填写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">1.14.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建tableview实现代理"><span class="nav-number">1.</span> <span class="nav-text">新建tableview实现代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义删除按钮的颜色等等"><span class="nav-number">2.</span> <span class="nav-text">自定义删除按钮的颜色等等</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

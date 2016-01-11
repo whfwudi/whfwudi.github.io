@@ -221,6 +221,162 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/11/UITableView删除按钮的自定义/" itemprop="url">
+                  UITableView删除按钮的自定义
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-11T11:30:30+08:00" content="2016-01-11">
+              2016-01-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/11/UITableView删除按钮的自定义/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/11/UITableView删除按钮的自定义/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>  今天遇到了一个功能，就是把tableview上的删除按钮自定义一下，这个功能以前倒是遇到过，但是没有做一个总结，今天就来讲一下tableview上的删除按钮的自定义，也给自己做一个总结。</p>
+<h3 id="新建tableview实现代理">新建tableview实现代理</h3><p>这个就不说了，作为一个iOS开发者，tableview是必须要会玩的，总要讲的是三个代理方法，这三个方法才是实现功能的三个方法。</p>
+<ol>
+<li><ul>
+<li><p>(BOOL)tableView:(UITableView <em>)tableView canEditRowAtIndexPath:(NSIndexPath </em>)indexPath;<br>实现方法为：</p>
+<p>   <code>-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath { return TRUE; }</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>这个方法的意思是允许tableview进行edit操作，而且可以定位到每一个indexPath，这个我全部返回了TRUE,就是全部都可以edit。</p>
+<ol>
+<li><ul>
+<li><p>(nullable NSString <em>)tableView:(UITableView </em>)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0) __TVOS_PROHIBITED;<br>实现方法为：</p>
+<p>   <code>-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath         *)indexPath { return @&quot;信息&quot;; }</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>这个方法的意思是自定义删除按钮返回的title，默认的是Delete，这里可以根据需求自定义返回需要的字符串。</p>
+<ol>
+<li><ul>
+<li><p>(void)tableView:(UITableView <em>)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath </em>)indexPath;<br>实现方法：</p>
+<pre><code>`-(<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView commitEditingStyle:(<span class="built_in">UITableViewCellEditingStyle</span>)editingStyle         forRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
+{
+<span class="keyword">switch</span> (editingStyle) {
+        <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleDelete</span>:
+
+           <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleInsert</span>:
+
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="built_in">UITableViewCellEditingStyleNone</span>:
+
+            <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="keyword">break</span>;
+}
+</code></pre><p>   }`</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>这个方法就是实现删除按钮操作的方法，就是我们现在的信息按钮，在这个方法中就可以实现我们想要实现的方法。</p>
+<h3 id="自定义删除按钮的颜色等等">自定义删除按钮的颜色等等</h3><p>这个是比较有侵入性的方法，慎用，有可能不让上线，但是我觉得如果自定义的非常好，应该是没有问题的把，具体的我也没尝试过。<br>新建继承与UITableViewCell的MITableViewCell，实现layoutSubviews，实现方法为：</p>
+<pre><code>`- (<span class="keyword">void</span>)layoutSubviews 
+{
+    [<span class="keyword">super</span> layoutSubviews]; <span class="keyword">for</span> (<span class="built_in">UIView</span> *subView <span class="keyword">in</span> <span class="keyword">self</span><span class="variable">.subviews</span>) {
+            <span class="keyword">if</span> ([<span class="built_in">NSStringFromClass</span>([subView class]) isEqualToString:<span class="string">@"UITableViewCellDeleteConfirmationView"</span>]) {
+                ((<span class="built_in">UIView</span> *)[subView<span class="variable">.subviews</span> firstObject])<span class="variable">.backgroundColor</span> = [<span class="built_in">UIColor</span> lightGrayColor];
+            }
+        }
+}`
+</code></pre><p>在这个方法中就可以自定义删除按钮的颜色等等</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/08/OSX10-11更新cocoapods/" itemprop="url">
                   OSX10.11更新cocoapods和使用
                 </a>
@@ -517,6 +673,548 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/07/ios8注册通知/" itemprop="url">
+                  ios8注册通知
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-07T15:46:03+08:00" content="2016-01-07">
+              2016-01-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/07/ios8注册通知/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/07/ios8注册通知/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>iOS推送目前分为四种：</p>
+<ol>
+<li>用户推送</li>
+<li>本地推送</li>
+<li>远程推送</li>
+<li>地理位置推送<br><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyeq298goj21kw0sadmt.jpg" alt="image"></li>
+</ol>
+<h3 id="用户推送">用户推送</h3><p>先开始讲用户推送，我们使用之前必须先注册这个推送，用户要允许这个程序进行推送<br>注册过程：</p>
+<pre><code>`<span class="keyword">if</span> (IS_IOS8) {  
+
+    <span class="comment">//1.创建消息上面要添加的动作(按钮的形式显示出来)  </span>
+    <span class="built_in">UIMutableUserNotificationAction</span> *action = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+    action<span class="variable">.identifier</span> = <span class="string">@"action"</span>;<span class="comment">//按钮的标示  </span>
+    action<span class="variable">.title</span>=<span class="string">@"Accept"</span>;<span class="comment">//按钮的标题  </span>
+    action<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeForeground</span>;<span class="comment">//当点击的时候启动程序  </span>
+    <span class="comment">//    action.authenticationRequired = YES;  </span>
+    <span class="comment">//    action.destructive = YES;  </span>
+
+    <span class="built_in">UIMutableUserNotificationAction</span> *action2 = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+    action2<span class="variable">.identifier</span> = <span class="string">@"action2"</span>;  
+    action2<span class="variable">.title</span>=<span class="string">@"Reject"</span>;  
+    action2<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeBackground</span>;<span class="comment">//当点击的时候不启动程序，在后台处理  </span>
+    action<span class="variable">.authenticationRequired</span> = <span class="literal">YES</span>;<span class="comment">//需要解锁才能处理，如果action.activationMode = UIUserNotificationActivationModeForeground;则这个属性被忽略；  </span>
+    action<span class="variable">.destructive</span> = <span class="literal">YES</span>;  
+
+    <span class="comment">//2.创建动作(按钮)的类别集合  </span>
+    <span class="built_in">UIMutableUserNotificationCategory</span> *categorys = [[<span class="built_in">UIMutableUserNotificationCategory</span> alloc] init];  
+    categorys<span class="variable">.identifier</span> = <span class="string">@"alert"</span>;<span class="comment">//这组动作的唯一标示,推送通知的时候也是根据这个来区分  </span>
+    [categorys setActions:@[action,action2] forContext:(<span class="built_in">UIUserNotificationActionContextMinimal</span>)];  
+
+    <span class="comment">//3.创建UIUserNotificationSettings，并设置消息的显示类类型  </span>
+    <span class="built_in">UIUserNotificationSettings</span> *notiSettings = [<span class="built_in">UIUserNotificationSettings</span> settingsForTypes:(<span class="built_in">UIUserNotificationTypeBadge</span> | <span class="built_in">UIUserNotificationTypeAlert</span> | <span class="built_in">UIRemoteNotificationTypeSound</span>) categories:[<span class="built_in">NSSet</span> setWithObjects:categorys, <span class="literal">nil</span> <span class="literal">nil</span>]];  
+    [application registerUserNotificationSettings:notiSettings];  
+
+}<span class="keyword">else</span>{  
+    [application registerForRemoteNotificationTypes: <span class="built_in">UIRemoteNotificationTypeAlert</span> | <span class="built_in">UIRemoteNotificationTypeBadge</span> | <span class="built_in">UIRemoteNotificationTypeSound</span>];  
+}  
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application didRegisterUserNotificationSettings:(<span class="built_in">UIUserNotificationSettings</span> *)notificationSettings  
+{  
+<span class="comment">//    UIUserNotificationSettings *settings = [application currentUserNotificationSettings];  </span>
+<span class="comment">//    UIUserNotificationType types = [settings types];  </span>
+<span class="comment">//    //只有5跟7的时候包含了 UIUserNotificationTypeBadge  </span>
+<span class="comment">//    if (types == 5 || types == 7) {  </span>
+<span class="comment">//        application.applicationIconBadgeNumber = 0;  </span>
+<span class="comment">//    }  </span>
+<span class="comment">//注册远程通知  </span>
+[application registerForRemoteNotifications];  
+</code></pre><p>}  `</p>
+<p>我们仅仅是注册了通知的设备，还要注推送通知的行为，在iOS8中，行为能直接在推送消息进行，如回复消息，拒绝等消息就是三个方法进行注册<br><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyeyi825mj21aa12ggoc.jpg" alt="image"></p>
+<p>我们如何能进行这些行为，首先我们需要注册这些行为</p>
+<ol>
+<li><p>Actions</p>
+<pre><code>`<span class="built_in">UIMutableUserNotificationAction</span> *acceptAction = [[<span class="built_in">UIMutableUserNotificationAction</span> alloc] init];  
+acceptAction<span class="variable">.identifier</span> = <span class="string">@"RickAction"</span>;  
+acceptAction<span class="variable">.title</span> = <span class="string">@"Accept"</span>;  
+acceptAction<span class="variable">.activationMode</span> = <span class="built_in">UIUserNotificationActivationModeBackground</span>;  
+acceptAction<span class="variable">.destructive</span> = <span class="literal">NO</span>;  
+acceptAction<span class="variable">.authenticationRequired</span> = <span class="literal">NO</span>;  `
+</code></pre></li>
+<li><p>Categories</p>
+<pre><code>`<span class="built_in">UIMutableUserNotificationCategory</span> *inviteCategory = [[<span class="built_in">UIMutableUserNotificationCategory</span> alloc] init];  
+inviteCategory<span class="variable">.identifier</span> = <span class="string">@"INVITE_CATEGORY"</span>;  
+inviteCategory setActions:@[acceptAction] forContext:<span class="built_in">UIUserNotificationActionContextDefault</span>];  `
+</code></pre></li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/626e5d69gw1ehyf4bfhvrj20q80zytaw.jpg" alt="image"></p>
+<p>我们需要注意这个UIUserNotificationActionContextDefault,如果我们使用这个，我们会得到这个推送行为，Maybe和Accept<br>我们还可以使用UIUserNotificationActionContextMinimal得到的是Decline和Accept行为</p>
+<p><img src="http://ww3.sinaimg.cn/large/626e5d69gw1ehyf61ypo0j20q010476h.jpg" alt="image"></p>
+<ol>
+<li>Settings</li>
+</ol>
+<p>在这些行为注册之后，我们加上之前提到的推送设置就完成了注册推送的这个流程了</p>
+<pre><code>`<span class="built_in">NSSet</span> *categories = [<span class="built_in">NSSet</span> setWithObjects:inviteCategory, <span class="literal">nil</span> <span class="literal">nil</span>];  
+<span class="built_in">UIUserNotificationType</span>  types = <span class="built_in">UIUserNotificationTypeBadge</span> | <span class="built_in">UIUserNotificationTypeSound</span> | <span class="built_in">UIUserNotificationTypeAlert</span> ;  
+<span class="built_in">UIUserNotificationSettings</span>  *mySettings  = [<span class="built_in">UIUserNotificationSettings</span> settingsForTypes:types categories:categories];  
+[[<span class="built_in">UIApplication</span> sharedApplication] registerUserNotificationSettings:mySettings];  `
+</code></pre><h3 id="远程推送">远程推送</h3><p>远程推送，所有消息大小不超过2KB,我们获取远程推送的json格式的消息，解析这个消息就是我们的远程推送了：</p>
+<pre><code>`{  
+        “aps”: {  
+           <span class="string">"content-available"</span>: <span class="number">1</span>,  
+        <span class="string">"alert"</span>: <span class="string">"This is the alert text"</span>,  
+        <span class="string">"badge"</span>: <span class="number">1</span>,  
+        <span class="string">"sound"</span>: <span class="string">"default"</span>  
+    }  
+}  `
+</code></pre><p>若要使用远程推送，满足两个条件：</p>
+<ol>
+<li><p>用户需要调用注册用户推送registerUserNotificationSettings;</p>
+<pre><code>`[[UIApplication sharedApplication] registerForRemoteNotifications];
+
+    - (<span class="typename">void</span>)<span class="string">application:</span>(UIApplication *)application <span class="string">didRegisterForRemoteNotificationsWithDeviceToken:</span>(NSData *)deviceToken {  
+    NSString *token=[NSString <span class="string">stringWithFormat:</span>@<span class="string">"%@"</span>,deviceToken];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">"&lt;"</span> <span class="string">withString:</span>@<span class="string">""</span>];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">"&gt;"</span> <span class="string">withString:</span>@<span class="string">""</span>];  
+    token=[token <span class="string">stringByReplacingOccurrencesOfString:</span>@<span class="string">" "</span> <span class="string">withString:</span>@<span class="string">""</span>];
+} 
+
+- (<span class="typename">void</span>)<span class="string">application:</span>(UIApplication *)application <span class="string">didFailToRegisterForRemoteNotificationsWithError:</span>(NSError *)error {  
+
+}`
+</code></pre></li>
+<li><p>在info.plist文件中UIBackgroundModes必须包含远程通知。</p>
+</li>
+</ol>
+<h3 id="iOS7通知代理方法">iOS7通知代理方法</h3><p><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfq2omeij21kw0zc456.jpg" alt="image"><br>后来又增加了本地通知的代理方法<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfvjws4ej21kw0uxn20.jpg" alt="image"><br>iOS8的推送代理方法只有两个了<br><img src="http://ww4.sinaimg.cn/large/626e5d69gw1ehyfws0hdfj210g0oyq6d.jpg" alt="image"></p>
+<pre><code>`- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forLocalNotification:    <span class="params">(UILocalNotification *)</span>notification completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+}  
+
+- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forRemoteNotification:<span class="params">(NSDictionary *)</span>userInfo completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+}  
+
+- <span class="params">(void)</span>application:<span class="params">(UIApplication *)</span>application handleActionWithIdentifier:<span class="params">(NSString *)</span>identifier forLocalNotification:    <span class="params">(UILocalNotification *)</span>notification completionHandler:<span class="params">(void <span class="params">(^)</span><span class="params">()</span>)</span>completionHandler  
+{  
+<span class="keyword">if</span> <span class="params">([identifier isEqualToString:@<span class="string">"RickAction"</span>])</span> {  
+    [self handleAcceptActionWithNotification:notification];  
+}  
+completionHandler<span class="params">()</span>;  
+}  
+
+- <span class="params">(void)</span>handleAcceptActionWithNotification:<span class="params">(UILocalNotification*)</span>notification  
+{  
+}  `
+</code></pre><h3 id="地理位置推送">地理位置推送</h3><p>这个推送是新的API才有的特性,必须配合CLLocation定位一起使用。</p>
+<pre><code>`<span class="comment">//Location Notification  </span>
+CLLocationManager *locMan = [[CLLocationManager alloc] init];  
+locMan<span class="variable">.delegate</span> = <span class="keyword">self</span>;  
+[locMan requestWhenInUseAuthorization];  
+
+- (<span class="keyword">void</span>)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status  
+
+{  
+<span class="built_in">BOOL</span> canUseLocationNotifications = (status == kCLAuthorizationStatusAuthorizedWhenInUse);  
+<span class="keyword">if</span> (canUseLocationNotifications) {  
+    [<span class="keyword">self</span> startShowLocationNotification];  
+}  
+}  
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application didReceiveLocalNotification:(<span class="built_in">UILocalNotification</span> *)notification  
+
+{  
+CLRegion *region = notification<span class="variable">.region</span>;  
+<span class="keyword">if</span> (region) {  
+}  
+}  
+
+- (<span class="keyword">void</span>)startShowLocationNotification  
+
+{  
+CLLocationCoordinate2D local2D ;  
+local2D<span class="variable">.latitude</span> = <span class="number">123.0</span>;  
+local2D<span class="variable">.longitude</span> = <span class="number">223.0</span>;  
+<span class="built_in">UILocalNotification</span> *locNotification = [[<span class="built_in">UILocalNotification</span> alloc] init];  
+locNotification<span class="variable">.alertBody</span> = <span class="string">@"你接收到了"</span>;  
+locNotification<span class="variable">.regionTriggersOnce</span> = <span class="literal">YES</span>;  
+locNotification<span class="variable">.region</span> = [[CLCircularRegion alloc] initWithCenter:local2D radius:<span class="number">45</span> identifier:<span class="string">@"local-identity"</span>];  
+[[<span class="built_in">UIApplication</span> sharedApplication] scheduleLocalNotification:locNotification];  
+}  `
+</code></pre><p>如果没有开启Core Location 那么上面的didReceiveLocalNotification不会被调用<br>最后再总结一下，整个推送流程我觉得是这样子的，先注册推送，然后推送消息，客户端接收推送消息，执行推送行为。如果有错误，还请在文章下面评论，欢迎指正。<br><img src="http://ww2.sinaimg.cn/large/626e5d69gw1ehyg8u1o51j21ea0qkmz1.jpg" alt="image"></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/07/ios推送机制的实现/" itemprop="url">
+                  iOS推送机制的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-07T15:11:34+08:00" content="2016-01-07">
+              2016-01-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/07/ios推送机制的实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/07/ios推送机制的实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="实现原理">实现原理</h3><p>ios消息推送的工作机制可以简单的用下图来概括：<br><img src="http://dl.iteye.com/upload/attachment/617605/322782e2-f9a1-3836-9ffe-9257e2fca12c.jpg" alt="image"><br>Provider是指某个iPhone软件的push服务器，APNS是Apple Push Notification Service的缩写，是苹果的服务器。</p>
+<p>上图可以分为三个阶段：</p>
+<ol>
+<li>应用程序要把发送的消息、目的iPhone的表示打包，发给APNS.</li>
+<li>APNS在自身的已注册Push服务的iPhone列表中，查找有相关表示的iPhone，并把消息发送给iPhone。</li>
+<li>iPhone把发来的消息传递给相应的应用程序，并且按照设定弹出Push通知。</li>
+</ol>
+<p><img src="http://dl.iteye.com/upload/attachment/617607/8deb07df-1356-3aed-8c2e-3e41d25d4e2f.jpg" alt="image"><br>从上图我们可以看到：</p>
+<ol>
+<li>应用程序注册消息推送</li>
+<li>iOS从APNS 获取到device token，应用程序接收device token</li>
+<li>应用程序将device token发送给push服务器</li>
+<li>服务端程序向APNS服务发送消息</li>
+<li>APNS服务器将消息发送给iPhone应用程序</li>
+</ol>
+<p>无论是iPhone客户端和APNS,还是Provider和APNS，都需要证书进行连接</p>
+<h3 id="下面我们介绍一下几种用到的证书">下面我们介绍一下几种用到的证书</h3><h4 id="CSR文件">CSR文件</h4><ol>
+<li><p>生成CSR文件<br><img src="http://dl.iteye.com/upload/attachment/617609/bea39b68-db6c-343a-85ee-15e9c20c343d.jpg" alt="image"></p>
+</li>
+<li><p>填写你的邮箱和常用名称，并选择保存到磁盘<br><img src="http://dl.iteye.com/upload/attachment/617611/cd5e9289-f943-3e8a-804f-35f452238d95.jpg" alt="image"></p>
+</li>
+<li><p>点击继续，保存到桌面<br><img src="http://dl.iteye.com/upload/attachment/617613/4acd574b-6252-3842-94c2-1d60f2a27b21.jpg" alt="image"></p>
+</li>
+</ol>
+<p>这样我们本地就生成了一个Push.certSigningRequest文件</p>
+<h4 id="p12文件">p12文件</h4><ol>
+<li>导出秘钥<br>打开钥匙串访问<br><img src="http://dl.iteye.com/upload/attachment/617615/1b41636d-58ac-34c2-b31c-073185dbbaef.jpg" alt="image"><br><img src="http://dl.iteye.com/upload/attachment/617618/c4644192-38b2-3b0c-bfd1-105ab850ce47.jpg" alt="image"></li>
+<li>输入密码<br><img src="http://dl.iteye.com/upload/attachment/617620/2671d2ca-2b34-30a1-88da-5406b0d33c7f.jpg" alt="image"></li>
+</ol>
+<p>这样我们就生成了一个p12文件</p>
+<h3 id="SSL_centificate文件">SSL centificate文件</h3><ol>
+<li>用你付过费的账号登陆到iOS Provisioning Portal，这个过程可以参考<a href="http://whfwudi.github.io/2016/01/02/ios%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95%E6%AD%A5%E9%AA%A4/" target="_blank" rel="external">iOS真机调试</a>，这样就会生成一条类似下图所示的记录<br><img src="http://dl.iteye.com/upload/attachment/0061/8004/36feeefd-ee3b-3341-90d6-5041fb6cccce.jpg" alt="image"></li>
+<li>点击右侧的Config：<br><img src="http://dl.iteye.com/upload/attachment/0061/8008/0347ea0a-e06b-3425-aa40-40e92f0b59c2.jpg" alt="image"></li>
+<li>点击Development Push SSL Certificate一行后的Configure：<br><img src="http://dl.iteye.com/upload/attachment/0061/8010/35e7eeb7-7b84-3352-89fd-1ea5049327c8.jpg" alt="image"></li>
+<li>点击Continue<br><img src="http://dl.iteye.com/upload/attachment/0061/8012/2d28e16e-f9c2-3f0f-98a6-0c92cf3d517e.jpg" alt="image"></li>
+<li>选择前面生成好的Push.certSigningRequest文件，点击Generate，出现如下所示的页面：<br><img src="http://dl.iteye.com/upload/attachment/0061/8016/e681263d-14a4-3b66-9e50-5e71c645bdc0.jpg" alt="image"></li>
+<li>点击Continue<br><img src="http://dl.iteye.com/upload/attachment/0061/8018/fab8eb43-56c7-300f-bb67-f722ce09a2b9.jpg" alt="image"></li>
+<li>点击Download，并将文件命名为aps_developer_identity.cer</li>
+<li>点击Done，你会发现状态变成了Enabled：<br><img src="http://dl.iteye.com/upload/attachment/0061/8025/72f36fed-4f10-32fb-8dbc-940fad8610bb.jpg" alt="image"><br>注意：有的Apple ID的Apple Push Notification service列是灰色的，并且不允许使用Configure按钮，这是因为APNS不支持带通配符的App ID。</li>
+</ol>
+<p>到现在为止，我们已经生成了三个文件：</p>
+<ol>
+<li>Push.certSigningRequest</li>
+<li>Push.p12</li>
+<li>aps_developer_identity.cer</li>
+</ol>
+<h3 id="在项目中配置推送">在项目中配置推送</h3><ol>
+<li><p>在项目的AppDelegate中的didFinishLaunchingWithOptions方法中加入下面的代码：</p>
+<pre><code>`<span class="attr_selector">[[UIApplication sharedApplication]</span> <span class="rule"><span class="attribute">registerForRemoteNotificationTypes</span>:<span class="value">(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge)]</span></span>; `
+</code></pre></li>
+<li><p>通过registerForRemoteNotificationTypes方法，告诉应用程序，能接受push来的通知。<br>在项目的AppDelegate中添加下面的方法来获取deviceToken：</p>
+<pre><code>`- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didRegisterForRemoteNotificationsWithDeviceToken:(<span class="built_in">NSData</span> *)deviceToken {     
+        <span class="built_in">NSString</span> *token = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>, deviceToken];  
+    <span class="built_in">NSLog</span>(<span class="string">@"My token is:%@"</span>, token);  
+}
+
+- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)app didFailToRegisterForRemoteNotificationsWithError:(<span class="built_in">NSError</span> *)error {      
+        <span class="built_in">NSString</span> *error_str = [<span class="built_in">NSString</span> stringWithFormat: <span class="string">@"%@"</span>, error];  
+    <span class="built_in">NSLog</span>(<span class="string">@"Failed to get token, error:%@"</span>, error_str);  
+}`  
+</code></pre></li>
+</ol>
+<p>获取到的deviceToken，我们可以提交给后台应用程序，发送通知的后台应用程序除了需要知道deviceToken之外，还需要一个与APNS连接的证书。<br>这个证书可以通过我们前面生成的两个文件中得到。</p>
+<ol>
+<li><p>将aps_developer_identity.cer转换成aps_developer_identity.pem格式</p>
+<pre><code>`openssl x509 -<span class="keyword">in</span> aps_developer_identity<span class="class">.cer</span> -inform DER -out aps_developer_identity<span class="class">.pem</span> -outform PEM`
+</code></pre></li>
+<li><p>将p12格式的私钥转换成pem</p>
+<pre><code>`openssl pkcs12 -nocerts -<span class="keyword">out</span> Push_Noenc.pem -<span class="keyword">in</span> <span class="keyword">Push</span>.p12`
+</code></pre></li>
+<li><p>创建p12文件</p>
+<pre><code>`openssl pkcs12 -export -<span class="keyword">in</span> aps_developer_identity<span class="class">.pem</span> -inkey Push_Noenc<span class="class">.pem</span> -certfile Push<span class="class">.certSigningRequest</span> -name <span class="string">"aps_developer_identity"</span> -out aps_developer_identity.p12`
+</code></pre></li>
+</ol>
+<p>这样我们就得到了在.net或java等后台应用程序中使用的证书文件：aps_developer_identity.p12</p>
+<p>如果后台应用是php的话,双击aps_developer_identity.cer，将其安装到电脑上，钥匙串选择登录，种类选择所有项目，在右侧列表中选中push的证书以及对应的专用密钥，并导出2项，命名为ck.p12。</p>
+<pre><code>`openssl pkcs12 -<span class="keyword">in</span> ck<span class="class">.p12</span> -out ck<span class="class">.pem</span> -nodes`
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/02/ios真机调试步骤/" itemprop="url">
+                  iOS真机调试步骤
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-02T14:10:20+08:00" content="2016-01-02">
+              2016-01-02
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/02/ios真机调试步骤/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/02/ios真机调试步骤/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="iOS真机调试步骤">iOS真机调试步骤</h2><h3 id="获取真机调试的证书">获取真机调试的证书</h3><p>先在本地生成获取证书的文件、找不到钥匙串可以直接用mac电脑的搜索功能<br><img src="http://c.hiphotos.baidu.com/exp/w=500/sign=c9ae1895d362853592e0d221a0ee76f2/18d8bc3eb13533fad075f149aed3fd1f40345b91.jpg" alt="搜索钥匙串访问"></p>
+<h3 id="请求证书">请求证书</h3><p>点击钥匙串访问-&gt;证书助理-&gt;从证书颁发机构申请证书<br><img src="http://g.hiphotos.baidu.com/exp/w=500/sign=3e9756cc053b5bb5bed720fe06d2d523/00e93901213fb80e6d4f36b030d12f2eb938943e.jpg" alt="请求证书"></p>
+<h3 id="填写相关信息">填写相关信息</h3><p>在用户电子邮件地址中填写开发者账号，然后点击存储到磁盘，再点击继续<br><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=b8f7a8e86a81800a6ee5890e813433d6/8694a4c27d1ed21b675b7f82ab6eddc450da3fc2.jpg" alt="image"></p>
+<h3 id="保存路径和生成文件的名字">保存路径和生成文件的名字</h3><p>选择保存在桌面（Desktop），然后点击存储<br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=44faa199c5fdfc03e578e3b8e43f87a9/a50f4bfbfbedab648f491aa7f136afc379311e99.jpg" alt="image"><br>然后就在桌面生成了一个文件<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=f1c9c449aed3fd1f3609a23a004f25ce/50da81cb39dbb6fd2124b2410f24ab18972b375d.jpg" alt="image"></p>
+<h3 id="点击进入开发者中心，然后进入个人中心">点击进入<a href="https://developer.apple.com/" target="_blank" rel="external">开发者中心</a>，然后进入个人中心</h3><p><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=ba88cb203f12b31bc76ccd29b6183674/908fa0ec08fa513def923bb93b6d55fbb2fbd999.jpg" alt="image"></p>
+<h3 id="进入证书颁发处">进入证书颁发处</h3><p><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=c5346802b519ebc4c0787699b226cf79/0b7b02087bf40ad1dedc9084512c11dfa9ecce99.jpg" alt="image"></p>
+<h3 id="点击iOS_Apps下的任何一项">点击iOS Apps下的任何一项</h3><p><img src="http://f.hiphotos.baidu.com/exp/w=500/sign=90ff849a7d899e51788e3a1472a7d990/b151f8198618367a7fb128ba28738bd4b31ce599.jpg" alt="image"><br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=f49a7d67ef24b899de3c79385e071d59/d6ca7bcb0a46f21f62ab0934f0246b600c33ae3e.jpg" alt="image"></p>
+<h3 id="添加证书">添加证书</h3><p>点击ALL 然后在点击右上角的加号，添加证书<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=fd32e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623dab6f2059e22720e0cf3d75d.jpg" alt="image"></p>
+<h3 id="选择iOS_App_Development">选择iOS App Development</h3><p><img src="http://g.hiphotos.baidu.com/exp/w=500/sign=7fe1cf1cd71373f0f53f6f9f940e4b8b/8601a18b87d6277f308d655f2e381f30e924fc3e.jpg" alt="image"></p>
+<h3 id="然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请">然后就一直点击Continue，最后就到了选择文件，这个文件就是我们最开始申请下来的钥匙串文件，选择之后一直Continue，最后把我们申请完成的证书下载下来，双击就可以了，然后就是appID的申请</h3><p><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=fdd1e983b51c8701d6b6b2e6177e9e6e/6c224f4a20a44623da55f2059e22720e0cf3d73e.jpg" alt="image"></p>
+<h3 id="添加App_IDs">添加App IDs</h3><p>点击App IDs，然后点击右上角的加号添加App IDs，填写必要的信息，然后一路Conitnus最后提交就可以了<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=0bb73814fdf2b211e42e854efa816511/e61190ef76c6a7efd594f641fbfaaf51f3de6622.jpg" alt="image"></p>
+<ol>
+<li>name可以随便写，只要是英文的就可以，自己要记住</li>
+<li>Boundle ID是你需要添加真机测试的xcode工程的Boundle Identifier，点击工程的targets，选择general就可以查看到。<h3 id="绑定iPhone设备，然后填写设备信息，一直Continue就可以了">绑定iPhone设备，然后填写设备信息，一直Continue就可以了</h3>设备的UDID可以在iTunes中查看到，链接设备，点击手机图标，点击序列号就发生改变，里面有UDID字段<br><img src="http://b.hiphotos.baidu.com/exp/w=500/sign=c803a0854dc2d562f208d0edd71090f3/810a19d8bc3eb13542c1b95ea41ea8d3fc1f44d4.jpg" alt="image"><br><img src="http://a.hiphotos.baidu.com/exp/w=500/sign=e26e88cce9c4b7453494b716fffd1e78/03087bf40ad162d91ae86cf913dfa9ec8b13cdd5.jpg" alt="image"><br><img src="http://f.hiphotos.baidu.com/exp/w=500/sign=689fe71153da81cb4ee683cd6264d0a4/42a98226cffc1e174f7383d44890f603728de903.jpg" alt="image"><h3 id="配置文件信息的填写">配置文件信息的填写</h3>点击加号创建新的卑职文件<br><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=7ebf275f68061d957d4637384bf50a5d/bf096b63f6246b60db8dec13edf81a4c500fa2d2.jpg" alt="image"><br>选择iOS App Development，下面两个是上架用和打包用的（企业证书）<br><img src="http://d.hiphotos.baidu.com/exp/w=500/sign=1294528cb0fd5266a72b3c149b199799/1f178a82b9014a90655c18daaf773912b31bee73.jpg" alt="image"><br>然后绑定我们在前面申请的appID，调试证书和设备信息，然后一直点击Continus，最后我们把申请完的配置文件下载到本地，双击打开就可以了<br><img src="http://h.hiphotos.baidu.com/exp/w=500/sign=dbaada6235fa828bd1239de3cd1e41cd/1ad5ad6eddc451dae65f528cb0fd5266d016322f.jpg" alt="image"><br><img src="http://e.hiphotos.baidu.com/exp/w=500/sign=6e4c087064d0f703e6b295dc38fb5148/d52a2834349b033bbfeaa2bd13ce36d3d539bd73.jpg" alt="image"><h3 id="注意事项">注意事项</h3>如果只是需要添加设备进行调试的话，先把设备添加到Devices中，然后修改配置文件就行了，其他的都不不要修改，双击下载的文件，新添加的设备就可以调试了</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/01/开发者申请流程/" itemprop="url">
                   iOS开发者申请流程
                 </a>
@@ -768,21 +1466,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">分类</span>
               
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
