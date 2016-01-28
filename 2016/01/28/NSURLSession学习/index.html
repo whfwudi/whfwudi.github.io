@@ -53,19 +53,19 @@
 
 
 
-<meta name="description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
+<meta name="description" content="这篇文章介绍的非常清楚
+NSURLSession学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS缓存清理功能的实现">
-<meta property="og:url" content="http://yoursite.com/2016/01/07/iOS缓存清理功能的实现/index.html">
+<meta property="og:title" content="NSURLSession学习">
+<meta property="og:url" content="http://yoursite.com/2016/01/28/NSURLSession学习/index.html">
 <meta property="og:site_name" content="Haifeng Wang’s Blog">
-<meta property="og:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
-<meta property="og:updated_time" content="2016-01-07T09:41:20.000Z">
+<meta property="og:description" content="这篇文章介绍的非常清楚
+NSURLSession学习">
+<meta property="og:updated_time" content="2016-01-28T03:11:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS缓存清理功能的实现">
-<meta name="twitter:description" content="移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：
-获取缓存文件的大小由于缓存文件都是存在沙盒中，所以我们可以通过NSFil">
+<meta name="twitter:title" content="NSURLSession学习">
+<meta name="twitter:description" content="这篇文章介绍的非常清楚
+NSURLSession学习">
 
 
 
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title> iOS缓存清理功能的实现 | Haifeng Wang’s Blog </title>
+  <title> NSURLSession学习 | Haifeng Wang’s Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -207,7 +207,7 @@
             
             
               
-                iOS缓存清理功能的实现
+                NSURLSession学习
               
             
           </h1>
@@ -216,8 +216,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-07T15:53:46+08:00" content="2016-01-07">
-              2016-01-07
+            <time itemprop="dateCreated" datetime="2016-01-28T11:08:13+08:00" content="2016-01-28">
+              2016-01-28
             </time>
           </span>
 
@@ -242,8 +242,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/07/iOS缓存清理功能的实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/07/iOS缓存清理功能的实现/" itemprop="commentsCount"></span>
+                <a href="/2016/01/28/NSURLSession学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/28/NSURLSession学习/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -262,50 +262,9 @@
       
 
       
-        <span itemprop="articleBody"><p>移动端应用在处理网络资源的时候，一般会做一些离线缓存的处理，其中最为典型的就是图片缓存，然而图片缓存是最不好处理的，其中非常流行的第三方离线缓存框架为SDWegImage。但是，离线缓存的内容太多又会占用手机的存储空间，所以缓存清理功能成为咨询，阅读等类app的标配功能。所以今天就来介绍一下离线缓存的清理功能，功能分为两步：</p>
-<h3 id="获取缓存文件的大小">获取缓存文件的大小</h3><p>由于缓存文件都是存在沙盒中，所以我们可以通过NSFileManager API来实现计算缓存文件大小的功能</p>
-<ol>
-<li><p>计算单个文件的大小</p>
-<pre><code>`(<span class="typename">float</span>)<span class="string">fileSizeAtPath:</span>(NSString *)path{
-        NSFileManager *fileManager=[NSFileManager defaultManager];
-    <span class="keyword">if</span>([fileManager <span class="string">fileExistsAtPath:</span>path]){
-    <span class="typename">long</span> <span class="typename">long</span> size=[fileManager <span class="string">attributesOfItemAtPath:</span>path <span class="string">error:</span>nil].fileSize;
-    <span class="keyword">return</span> size<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
-    }
-    <span class="keyword">return</span> <span class="number">0</span>;
-}`
-</code></pre></li>
-<li><p>计算目录大小</p>
-<pre><code>`+(<span class="typename">float</span>)<span class="string">folderSizeAtPath:</span>(NSString *)path{
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    <span class="typename">float</span> folderSize;
-    <span class="keyword">if</span> ([fileManager <span class="string">fileExistsAtPath:</span>path]) {
-    NSArray *childerFiles=[fileManager <span class="string">subpathsAtPath:</span>path];
-    <span class="keyword">for</span> (NSString *fileName <span class="keyword">in</span> childerFiles) {
-        NSString *absolutePath=[path <span class="string">stringByAppendingPathComponent:</span>fileName];
-        folderSize +=[FileService <span class="string">fileSizeAtPath:</span>absolutePath];
-    }
-    folderSize+=[[SDImageCache sharedImageCache] getSize]<span class="regexp">/1024.0/</span><span class="number">1024.0</span>;
-    <span class="keyword">return</span> folderSize;
-        }
-    <span class="keyword">return</span> <span class="number">0</span>;    
-}`
-</code></pre></li>
-</ol>
-<h3 id="清除缓存文件">清除缓存文件</h3><p>同样也是利用NSFileManager API来实现，SDWebImage框架自己实现了清理缓存操作，我们可以直接调用。</p>
-<pre><code>`+(<span class="keyword">void</span>)clearCache:(<span class="built_in">NSString</span> *)path{
-    <span class="built_in">NSFileManager</span> *fileManager=[<span class="built_in">NSFileManager</span> defaultManager];
-    <span class="keyword">if</span> ([fileManager fileExistsAtPath:path]) {
-        <span class="built_in">NSArray</span> *childerFiles=[fileManager subpathsAtPath:path];
-        <span class="keyword">for</span> (<span class="built_in">NSString</span> *fileName <span class="keyword">in</span> childerFiles) {
-            <span class="comment">//如有需要，加入条件，过滤掉不想删除的文件</span>
-            <span class="built_in">NSString</span> *absolutePath=[path stringByAppendingPathComponent:fileName];
-            [fileManager removeItemAtPath:absolutePath error:<span class="literal">nil</span>];
-        }
-    }
-    [[SDImageCache sharedImageCache] cleanDisk];
-}`
-</code></pre></span>
+        <span itemprop="articleBody"><p>这篇文章介绍的非常清楚</p>
+<p><a href="http://blog.csdn.net/majiakun1/article/details/38133433" target="_blank" rel="external">NSURLSession学习</a></p>
+</span>
       
     </div>
 
@@ -322,17 +281,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/07/ios8注册通知/" rel="next" title="ios8注册通知">
-                <i class="fa fa-chevron-left"></i> ios8注册通知
+              <a href="/2016/01/12/php学习之路/" rel="next" title="php学习之路">
+                <i class="fa fa-chevron-left"></i> php学习之路
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/08/OSX10-11更新cocoapods/" rel="prev" title="OSX10.11更新cocoapods和使用">
-                OSX10.11更新cocoapods和使用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -359,8 +314,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/07/iOS缓存清理功能的实现/"
-           data-title="iOS缓存清理功能的实现" data-url="http://yoursite.com/2016/01/07/iOS缓存清理功能的实现/">
+      <div class="ds-thread" data-thread-key="2016/01/28/NSURLSession学习/"
+           data-title="NSURLSession学习" data-url="http://yoursite.com/2016/01/28/NSURLSession学习/">
       </div>
     
   </div>
@@ -456,7 +411,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取缓存文件的大小"><span class="nav-number">1.</span> <span class="nav-text">获取缓存文件的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除缓存文件"><span class="nav-number">2.</span> <span class="nav-text">清除缓存文件</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
